@@ -110,13 +110,7 @@ class Showcase extends StatefulWidget {
             disposeOnTap == null
                 ? true
                 : (onTargetClick == null ? false : true),
-            "onTargetClick is required if you're using disposeOnTap"),
-        assert(
-            textButtonStyle == null ? true : (withStep == false ? false : true),
-            "textButtonStyle is required if you're using withStep"),
-        assert(
-            withStep == true ? false : (textButtonStyle == null ? true : false),
-            "withStep is required if you're using textButtonStyle");
+            "onTargetClick is required if you're using disposeOnTap");
 
   const Showcase.withWidget({
     required this.key,
