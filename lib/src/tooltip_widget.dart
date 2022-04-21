@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'get_position.dart';
@@ -45,6 +43,7 @@ class ToolTipWidget extends StatefulWidget {
   final EdgeInsets? contentPadding;
   final Duration animationDuration;
   final bool disableAnimation;
+  final Widget actionButton;
 
   ToolTipWidget({
     required this.position,
@@ -62,6 +61,7 @@ class ToolTipWidget extends StatefulWidget {
     required this.contentWidth,
     required this.onTooltipTap,
     required this.animationDuration,
+    required this.actionButton,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
     required this.disableAnimation,
   });
@@ -100,31 +100,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
   }
 
   double _getTooltipWidth() {
-    final titleStyle = widget.titleTextStyle ??
-        Theme.of(context)
-            .textTheme
-            .headline6!
-            .merge(TextStyle(color: widget.textColor));
-    final descriptionStyle = widget.descTextStyle ??
-        Theme.of(context)
-            .textTheme
-            .subtitle2!
-            .merge(TextStyle(color: widget.textColor));
-    final titleLength = widget.title == null
-        ? 0
-        : _textSize(widget.title!, titleStyle).width +
-            widget.contentPadding!.right +
-            widget.contentPadding!.left;
-    final descriptionLength =
-        _textSize(widget.description!, descriptionStyle).width +
-            widget.contentPadding!.right +
-            widget.contentPadding!.left;
-    var maxTextWidth = max(titleLength, descriptionLength);
-    if (maxTextWidth > widget.screenSize!.width - 20) {
-      return widget.screenSize!.width - 20;
-    } else {
-      return maxTextWidth + 15;
-    }
+    return widget.screenSize!.width - 20;
   }
 
   bool _isLeft() {
@@ -149,7 +125,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
       }
       return leftPadding;
     } else if (!(_isRight())) {
-      return widget.position!.getCenter() - (_getTooltipWidth() * 0.5);
+      return 14;
     } else {
       return null;
     }
@@ -164,7 +140,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
       }
       return rightPadding;
     } else if (!(_isLeft())) {
-      return widget.position!.getCenter() - (_getTooltipWidth() * 0.5);
+      return 14;
     } else {
       return null;
     }
@@ -308,11 +284,11 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                             color: widget.tooltipColor,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Column(
-                                  crossAxisAlignment: widget.title != null
-                                      ? CrossAxisAlignment.start
-                                      : CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     widget.title != null
                                         ? Text(
@@ -320,10 +296,12 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                                             style: widget.titleTextStyle ??
                                                 Theme.of(context)
                                                     .textTheme
-                                                    .headline6!
+                                                    .bodyText1!
                                                     .merge(
                                                       TextStyle(
                                                         color: widget.textColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                           )
@@ -333,7 +311,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                                       style: widget.descTextStyle ??
                                           Theme.of(context)
                                               .textTheme
-                                              .subtitle2!
+                                              .subtitle1!
                                               .merge(
                                                 TextStyle(
                                                   color: widget.textColor,
@@ -341,7 +319,9 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                                               ),
                                     ),
                                   ],
-                                )
+                                ),
+                                SizedBox(height: 24),
+                                widget.actionButton,
                               ],
                             ),
                           ),
@@ -400,17 +380,6 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
         ],
       );
     }
-  }
-
-  Size _textSize(String text, TextStyle style) {
-    final textPainter = (TextPainter(
-            text: TextSpan(text: text, style: style),
-            maxLines: 1,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor,
-            textDirection: TextDirection.ltr)
-          ..layout())
-        .size;
-    return textPainter;
   }
 }
 

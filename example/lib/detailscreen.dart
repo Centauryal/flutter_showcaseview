@@ -50,6 +50,7 @@ class _DetailState extends State<Detail> {
                     key: _one,
                     title: 'Title',
                     description: 'Desc',
+                    colorAccent: Colors.orange,
                     child: InkWell(
                       onTap: () {},
                       child: const Text(

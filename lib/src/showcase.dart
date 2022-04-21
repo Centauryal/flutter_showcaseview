@@ -26,6 +26,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/colors.dart';
 import 'get_position.dart';
 import 'layout_overlays.dart';
 import 'shape_clipper.dart';
@@ -39,16 +40,19 @@ class Showcase extends StatefulWidget {
   final Widget child;
   final String? title;
   final String? description;
+  final bool withStep;
   final ShapeBorder? shapeBorder;
   final BorderRadius? radius;
   final TextStyle? titleTextStyle;
   final TextStyle? descTextStyle;
+  final TextStyle? textButtonStyle;
   final EdgeInsets contentPadding;
   final Color overlayColor;
   final double overlayOpacity;
   final Widget? container;
   final Color showcaseBackgroundColor;
   final Color textColor;
+  final Color colorAccent;
   final bool showArrow;
   final double? height;
   final double? width;
@@ -70,22 +74,24 @@ class Showcase extends StatefulWidget {
   const Showcase({
     required this.key,
     required this.child,
-    this.title,
+    required this.title,
     required this.description,
+    this.withStep = false,
     this.shapeBorder,
     this.overlayColor = Colors.black45,
     this.overlayOpacity = 0.75,
     this.titleTextStyle,
     this.descTextStyle,
-    this.showcaseBackgroundColor = Colors.white,
-    this.textColor = Colors.black,
+    this.textButtonStyle,
+    this.showcaseBackgroundColor = kNeutral800,
+    this.textColor = kNeutral300,
+    required this.colorAccent,
     this.showArrow = true,
     this.onTargetClick,
     this.disposeOnTap,
     this.animationDuration = const Duration(milliseconds: 2000),
-    this.disableAnimation = false,
-    this.contentPadding =
-        const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+    this.disableAnimation = true,
+    this.contentPadding = const EdgeInsets.all(16),
     this.onToolTipClick,
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
@@ -114,14 +120,17 @@ class Showcase extends StatefulWidget {
     required this.width,
     this.title,
     this.description,
+    this.withStep = false,
     this.shapeBorder,
     this.overlayColor = Colors.black45,
     this.radius,
     this.overlayOpacity = 0.75,
     this.titleTextStyle,
     this.descTextStyle,
-    this.showcaseBackgroundColor = Colors.white,
-    this.textColor = Colors.black,
+    this.textButtonStyle,
+    this.showcaseBackgroundColor = kNeutral800,
+    this.textColor = kNeutral300,
+    required this.colorAccent,
     this.onTargetClick,
     this.disposeOnTap,
     this.animationDuration = const Duration(milliseconds: 2000),
@@ -212,6 +221,22 @@ class _ShowcaseState extends State<Showcase> {
     }
   }
 
+  void _dismissTap() {
+    ShowCaseWidget.of(context)!.dismiss();
+  }
+
+  void _previousTap() {
+    ShowCaseWidget.of(context)!.previous();
+  }
+
+  int? _lengthShowcase() {
+    return ShowCaseWidget.of(context)!.ids!.length - 1;
+  }
+
+  int? _currentPageShowcase() {
+    return ShowCaseWidget.of(context)?.activeWidgetId;
+  }
+
   void _getOnTooltipTap() {
     if (widget.disposeOnTap == true) {
       ShowCaseWidget.of(context)!.dismiss();
@@ -292,6 +317,20 @@ class _ShowcaseState extends State<Showcase> {
                 contentPadding: widget.contentPadding,
                 disableAnimation: widget.disableAnimation,
                 animationDuration: widget.animationDuration,
+                actionButton: widget.withStep
+                    ? ActionWithStep(
+                        length: _lengthShowcase(),
+                        currentPage: _currentPageShowcase(),
+                        skipButton: _dismissTap,
+                        nextButton: _nextIfAny,
+                        previousButton: _previousTap,
+                        finishButton: _dismissTap,
+                        colorAccent: widget.colorAccent,
+                        textButtonStyle: widget.textButtonStyle ?? TextStyle(),
+                      )
+                    : ActionWithOkButton(
+                        okButton: _dismissTap,
+                      ),
               ),
             ],
           )
@@ -342,6 +381,143 @@ class _TargetWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ActionWithOkButton extends StatelessWidget {
+  final VoidCallback okButton;
+
+  const ActionWithOkButton({
+    Key? key,
+    required this.okButton,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 38,
+      child: ElevatedButton(
+        onPressed: okButton,
+        child: Text('ok'.toUpperCase()),
+      ),
+    );
+  }
+}
+
+class ActionWithStep extends StatelessWidget {
+  final int? length;
+  final int? currentPage;
+  final VoidCallback skipButton;
+  final VoidCallback nextButton;
+  final VoidCallback previousButton;
+  final VoidCallback finishButton;
+  final Color colorAccent;
+  final TextStyle textButtonStyle;
+
+  const ActionWithStep({
+    Key? key,
+    required this.length,
+    required this.currentPage,
+    required this.skipButton,
+    required this.nextButton,
+    required this.previousButton,
+    required this.finishButton,
+    required this.colorAccent,
+    required this.textButtonStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: List.generate(
+              length! + 1,
+              (index) => Padding(
+                    padding: const EdgeInsets.only(right: 3),
+                    child: Container(
+                      height: 5,
+                      width: 5,
+                      decoration: BoxDecoration(
+                          color: index == currentPage ? colorAccent : kGrey,
+                          shape: BoxShape.circle),
+                    ),
+                  )),
+        ),
+        Row(
+          children: [
+            GestureDetector(
+              onTap: skipButton,
+              child: Text(
+                'lewati',
+                style: textButtonStyle.copyWith(color: colorAccent),
+              ),
+            ),
+            SizedBox(width: 15),
+            currentPage == length
+                ? Row(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: kNeutral0,
+                            width: 1,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: previousButton,
+                          icon: Center(
+                            child: Icon(
+                              Icons.chevron_left,
+                              color: kNeutral0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: colorAccent,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          onPressed: finishButton,
+                          icon: Center(
+                            child: Icon(
+                              Icons.check,
+                              color: kNeutral1000,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: colorAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      onPressed: nextButton,
+                      icon: Center(
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: kNeutral1000,
+                        ),
+                      ),
+                    ),
+                  ),
+          ],
+        )
+      ],
     );
   }
 }

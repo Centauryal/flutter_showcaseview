@@ -169,7 +169,9 @@ class _MailPageState extends State<MailPage> {
                                   children: <Widget>[
                                     Showcase(
                                       key: _one,
+                                      title: 'Menu',
                                       description: 'Tap to see menu options',
+                                      colorAccent: Colors.orange,
                                       child: Icon(
                                         Icons.menu,
                                         color: Theme.of(context).primaryColor,
@@ -205,6 +207,7 @@ class _MailPageState extends State<MailPage> {
                       title: 'Profile',
                       description:
                           "Tap to see profile which contains user's name, profile picture, mobile number and country",
+                      colorAccent: Colors.orange,
                       showcaseBackgroundColor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       shapeBorder: const CircleBorder(),
@@ -259,6 +262,7 @@ class _MailPageState extends State<MailPage> {
         key: _five,
         title: 'Compose Mail',
         description: 'Click here to compose mail',
+        colorAccent: Colors.orange,
         shapeBorder: const CircleBorder(),
         child: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
@@ -290,8 +294,10 @@ class _MailPageState extends State<MailPage> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Showcase(
           key: _three,
+          title: 'Email',
           description: 'Tap to check mail',
           disposeOnTap: true,
+          colorAccent: Colors.orange,
           onTargetClick: () {
             Navigator.push<void>(
               context,
@@ -319,6 +325,7 @@ class _MailPageState extends State<MailPage> {
                         key: _four,
                         height: 50,
                         width: 140,
+                        colorAccent: Colors.orange,
                         shapeBorder: const CircleBorder(),
                         radius: const BorderRadius.all(Radius.circular(150)),
                         container: Column(
