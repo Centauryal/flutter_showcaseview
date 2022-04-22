@@ -306,6 +306,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                                                     ),
                                           )
                                         : SizedBox(),
+                                    SizedBox(height: 8),
                                     Text(
                                       widget.description!,
                                       style: widget.descTextStyle ??

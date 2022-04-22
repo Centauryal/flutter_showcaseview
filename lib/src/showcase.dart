@@ -62,6 +62,7 @@ class Showcase extends StatefulWidget {
   final bool? disposeOnTap;
   final bool disableAnimation;
   final EdgeInsets overlayPadding;
+  final Size sizeIndicatorStep;
 
   /// Defines blur value.
   /// This will blur the background while displaying showcase.
@@ -96,6 +97,7 @@ class Showcase extends StatefulWidget {
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
     this.radius,
+    this.sizeIndicatorStep = const Size(8, 8),
   })  : height = null,
         width = null,
         container = null,
@@ -138,6 +140,7 @@ class Showcase extends StatefulWidget {
     this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
+    this.sizeIndicatorStep = const Size(8, 8),
   })  : showArrow = false,
         onToolTipClick = null,
         assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
@@ -327,6 +330,7 @@ class _ShowcaseState extends State<Showcase> {
                         finishButton: _dismissTap,
                         colorAccent: widget.colorAccent,
                         textButtonStyle: widget.textButtonStyle ?? TextStyle(),
+                        sizeIndicatorStep: widget.sizeIndicatorStep,
                       )
                     : ActionWithOkButton(
                         okButton: _dismissTap,
@@ -414,19 +418,21 @@ class ActionWithStep extends StatelessWidget {
   final VoidCallback previousButton;
   final VoidCallback finishButton;
   final Color colorAccent;
-  final TextStyle textButtonStyle;
+  final TextStyle? textButtonStyle;
+  final Size sizeIndicatorStep;
 
-  const ActionWithStep({
-    Key? key,
-    required this.length,
-    required this.currentPage,
-    required this.skipButton,
-    required this.nextButton,
-    required this.previousButton,
-    required this.finishButton,
-    required this.colorAccent,
-    required this.textButtonStyle,
-  }) : super(key: key);
+  const ActionWithStep(
+      {Key? key,
+      required this.length,
+      required this.currentPage,
+      required this.skipButton,
+      required this.nextButton,
+      required this.previousButton,
+      required this.finishButton,
+      required this.colorAccent,
+      required this.textButtonStyle,
+      required this.sizeIndicatorStep})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -439,8 +445,8 @@ class ActionWithStep extends StatelessWidget {
               (index) => Padding(
                     padding: const EdgeInsets.only(right: 3),
                     child: Container(
-                      height: 5,
-                      width: 5,
+                      height: sizeIndicatorStep.height,
+                      width: sizeIndicatorStep.width,
                       decoration: BoxDecoration(
                           color: index == currentPage ? colorAccent : kGrey,
                           shape: BoxShape.circle),
@@ -452,8 +458,12 @@ class ActionWithStep extends StatelessWidget {
             GestureDetector(
               onTap: skipButton,
               child: Text(
-                'lewati',
-                style: textButtonStyle.copyWith(color: colorAccent),
+                'lewati'.toUpperCase(),
+                style: textButtonStyle?.copyWith(color: colorAccent) ??
+                    Theme.of(context)
+                        .textTheme
+                        .caption
+                        ?.copyWith(color: colorAccent),
               ),
             ),
             SizedBox(width: 15),
