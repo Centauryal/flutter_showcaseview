@@ -59,6 +59,7 @@ class Showcase extends StatefulWidget {
   final Duration animationDuration;
   final VoidCallback? onToolTipClick;
   final VoidCallback? onTargetClick;
+  final VoidCallback? onFinishClick;
   final bool? disposeOnTap;
   final bool disableAnimation;
   final EdgeInsets overlayPadding;
@@ -89,6 +90,7 @@ class Showcase extends StatefulWidget {
     required this.colorAccent,
     this.showArrow = true,
     this.onTargetClick,
+    this.onFinishClick,
     this.disposeOnTap,
     this.animationDuration = const Duration(milliseconds: 2000),
     this.disableAnimation = true,
@@ -134,6 +136,7 @@ class Showcase extends StatefulWidget {
     this.textColor = kNeutral300,
     required this.colorAccent,
     this.onTargetClick,
+    this.onFinishClick,
     this.disposeOnTap,
     this.animationDuration = const Duration(milliseconds: 2000),
     this.disableAnimation = false,
@@ -225,6 +228,7 @@ class _ShowcaseState extends State<Showcase> {
   }
 
   void _dismissTap() {
+    widget.onFinishClick?.call();
     ShowCaseWidget.of(context)!.dismiss();
   }
 
