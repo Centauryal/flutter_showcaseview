@@ -408,7 +408,10 @@ class ActionWithOkButton extends StatelessWidget {
       height: 38,
       child: ElevatedButton(
         onPressed: okButton,
-        child: Text('ok'.toUpperCase()),
+        child: Text(
+          'oke'.toUpperCase(),
+          style: TextStyle(color: kNeutral1000),
+        ),
       ),
     );
   }
