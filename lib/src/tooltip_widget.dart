@@ -293,6 +293,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                                     widget.title != null
                                         ? Text(
                                             widget.title!,
+                                            textAlign: TextAlign.center,
                                             style: widget.titleTextStyle ??
                                                 Theme.of(context)
                                                     .textTheme
@@ -309,6 +310,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                                     SizedBox(height: 8),
                                     Text(
                                       widget.description!,
+                                      textAlign: TextAlign.center,
                                       style: widget.descTextStyle ??
                                           Theme.of(context)
                                               .textTheme
