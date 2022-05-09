@@ -80,7 +80,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
   late final Animation<double> _curvedAnimation;
 
   bool isCloseToTopOrBottom(Offset position) {
-    var height = 120.0;
+    var height = 175.0;
     height = widget.contentHeight ?? height;
     final bottomPosition =
         position.dy + ((widget.position?.getHeight() ?? 0) / 2);
