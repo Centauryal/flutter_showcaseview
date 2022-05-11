@@ -103,47 +103,12 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
     return widget.screenSize!.width - 20;
   }
 
-  bool _isLeft() {
-    final screenWidth = widget.screenSize!.width / 3;
-    return !(screenWidth <= widget.position!.getCenter());
-  }
-
-  bool _isRight() {
-    final screenWidth = widget.screenSize!.width / 3;
-    return ((screenWidth * 2) <= widget.position!.getCenter());
-  }
-
   double? _getLeft() {
-    if (_isLeft()) {
-      var leftPadding =
-          widget.position!.getCenter() - (_getTooltipWidth() * 0.1);
-      if (leftPadding + _getTooltipWidth() > widget.screenSize!.width) {
-        leftPadding = (widget.screenSize!.width - 20) - _getTooltipWidth();
-      }
-      if (leftPadding < 20) {
-        leftPadding = 14;
-      }
-      return leftPadding;
-    } else if (!(_isRight())) {
-      return 14;
-    } else {
-      return null;
-    }
+    return 16;
   }
 
   double? _getRight() {
-    if (_isRight()) {
-      var rightPadding =
-          widget.position!.getCenter() + (_getTooltipWidth() / 2);
-      if (rightPadding + _getTooltipWidth() > widget.screenSize!.width) {
-        rightPadding = 14;
-      }
-      return rightPadding;
-    } else if (!(_isLeft())) {
-      return 14;
-    } else {
-      return null;
-    }
+    return 16;
   }
 
   double _getSpace() {
