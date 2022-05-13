@@ -311,7 +311,11 @@ class _ShowcaseState extends State<Showcase> {
               _TargetWidget(
                 offset: offset,
                 size: size,
-                onTap: _getOnTargetTap,
+                onTap: () {
+                  if (disableBarrierInteraction()) {
+                    _getOnTargetTap;
+                  }
+                },
                 shapeBorder: widget.shapeBorder,
               ),
               ToolTipWidget(
