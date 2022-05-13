@@ -251,6 +251,10 @@ class _ShowcaseState extends State<Showcase> {
     widget.onToolTipClick?.call();
   }
 
+  bool disableBarrierInteraction() {
+    return ShowCaseWidget.of(context)!.disableBarrierInteraction;
+  }
+
   Widget buildOverlayOnTarget(
     Offset offset,
     Size size,
@@ -270,7 +274,11 @@ class _ShowcaseState extends State<Showcase> {
         ? Stack(
             children: [
               GestureDetector(
-                onTap: _nextIfAny,
+                onTap: () {
+                  if (disableBarrierInteraction()) {
+                    _nextIfAny();
+                  }
+                },
                 child: ClipPath(
                   clipper: RRectClipper(
                     area: rectBound,
