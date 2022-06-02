@@ -237,7 +237,7 @@ class _ShowcaseState extends State<Showcase> {
   }
 
   int? _lengthShowcase() {
-    return ShowCaseWidget.of(context)?.ids?.length ?? 0 - 1;
+    return ShowCaseWidget.of(context)?.ids?.length ?? 0;
   }
 
   int? _currentPageShowcase() {
@@ -455,12 +455,14 @@ class ActionWithStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var lengthLast = length! - 1;
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: List.generate(
-              length! + 1,
+              length ?? 0,
               (index) => Padding(
                     padding: const EdgeInsets.only(right: 3),
                     child: Container(
@@ -486,7 +488,7 @@ class ActionWithStep extends StatelessWidget {
               ),
             ),
             SizedBox(width: 15),
-            currentPage == length
+            currentPage == lengthLast
                 ? Row(
                     children: [
                       Container(
