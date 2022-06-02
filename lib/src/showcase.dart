@@ -237,7 +237,7 @@ class _ShowcaseState extends State<Showcase> {
   }
 
   int? _lengthShowcase() {
-    return ShowCaseWidget.of(context)!.ids!.length - 1;
+    return ShowCaseWidget.of(context)?.ids?.length ?? 1 - 1;
   }
 
   int? _currentPageShowcase() {
