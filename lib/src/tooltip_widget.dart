@@ -21,6 +21,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'get_position.dart';
 import 'measure_size.dart';
@@ -99,16 +100,9 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
     }
   }
 
+  /// TODO set toolTips width
   double _getTooltipWidth() {
-    return widget.screenSize!.width - 20;
-  }
-
-  double? _getLeft() {
-    return 16;
-  }
-
-  double? _getRight() {
-    return 16;
+    return 328.w;
   }
 
   double _getSpace() {
@@ -183,8 +177,8 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
     if (widget.container == null) {
       return Positioned(
         top: contentY,
-        left: _getLeft(),
-        right: _getRight(),
+        left: 0,
+        right: 0,
         child: FractionalTranslation(
           translation: Offset(0.0, contentFractionalOffset as double),
           child: SlideTransition(
@@ -202,25 +196,12 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                       )
                     : null,
                 child: Stack(
-                  alignment: isArrowUp
-                      ? Alignment.topLeft
-                      : _getLeft() == null
-                          ? Alignment.bottomRight
-                          : Alignment.bottomLeft,
+                  alignment:
+                      isArrowUp ? Alignment.topLeft : Alignment.bottomLeft,
                   children: [
                     if (widget.showArrow)
                       Positioned(
-                        left: _getLeft() == null
-                            ? null
-                            : (widget.position!.getCenter() -
-                                (arrowWidth / 2) -
-                                (_getLeft() ?? 0)),
-                        right: _getLeft() == null
-                            ? (MediaQuery.of(context).size.width -
-                                    widget.position!.getCenter()) -
-                                (_getRight() ?? 0) -
-                                (arrowWidth / 2)
-                            : null,
+                        left: (widget.position!.getCenter() - (arrowWidth / 2)),
                         child: CustomPaint(
                           painter: _Arrow(
                             strokeColor: widget.tooltipColor!,
@@ -239,14 +220,16 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                         top: isArrowUp ? arrowHeight - 1 : 0,
                         bottom: isArrowUp ? 0 : arrowHeight - 1,
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: GestureDetector(
-                          onTap: widget.onTooltipTap,
+                      child: GestureDetector(
+                        onTap: widget.onTooltipTap,
+                        child: Center(
                           child: Container(
                             width: _getTooltipWidth(),
                             padding: widget.contentPadding,
-                            color: widget.tooltipColor,
+                            decoration: BoxDecoration(
+                              color: widget.tooltipColor,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
