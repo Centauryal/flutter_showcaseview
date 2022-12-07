@@ -45,6 +45,7 @@ class ToolTipWidget extends StatefulWidget {
   final Duration animationDuration;
   final bool disableAnimation;
   final Widget actionButton;
+  final Widget content;
 
   ToolTipWidget({
     required this.position,
@@ -65,6 +66,7 @@ class ToolTipWidget extends StatefulWidget {
     required this.actionButton,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
     required this.disableAnimation,
+    required this.content,
   });
 
   @override
@@ -235,42 +237,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    widget.title != null
-                                        ? Text(
-                                            widget.title!,
-                                            textAlign: TextAlign.center,
-                                            style: widget.titleTextStyle ??
-                                                Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1!
-                                                    .merge(
-                                                      TextStyle(
-                                                        color: widget.textColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                          )
-                                        : SizedBox(),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      widget.description!,
-                                      textAlign: TextAlign.center,
-                                      style: widget.descTextStyle ??
-                                          Theme.of(context)
-                                              .textTheme
-                                              .subtitle1!
-                                              .merge(
-                                                TextStyle(
-                                                  color: widget.textColor,
-                                                ),
-                                              ),
-                                    ),
-                                  ],
-                                ),
+                                widget.content,
                                 SizedBox(height: 24),
                                 widget.actionButton,
                               ],

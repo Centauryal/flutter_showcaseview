@@ -64,6 +64,7 @@ class Showcase extends StatefulWidget {
   final bool disableAnimation;
   final EdgeInsets overlayPadding;
   final Size sizeIndicatorStep;
+  final Widget content;
 
   /// Defines blur value.
   /// This will blur the background while displaying showcase.
@@ -78,6 +79,7 @@ class Showcase extends StatefulWidget {
     required this.child,
     required this.title,
     required this.description,
+    required this.content,
     this.withStep = false,
     this.shapeBorder,
     this.overlayColor = Colors.black45,
@@ -122,6 +124,7 @@ class Showcase extends StatefulWidget {
     required this.container,
     required this.height,
     required this.width,
+    required this.content,
     this.title,
     this.description,
     this.withStep = false,
@@ -351,6 +354,7 @@ class _ShowcaseState extends State<Showcase> {
                     : ActionWithOkButton(
                         okButton: _dismissTap,
                       ),
+                content: widget.content,
               ),
             ],
           )

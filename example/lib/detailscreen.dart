@@ -49,6 +49,7 @@ class _DetailState extends State<Detail> {
                   Showcase(
                     key: _one,
                     title: 'Title',
+                    content: const Text('content'),
                     description: 'Desc',
                     colorAccent: Colors.orange,
                     child: InkWell(
