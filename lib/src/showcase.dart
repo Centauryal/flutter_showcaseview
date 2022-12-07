@@ -42,7 +42,6 @@ class Showcase extends StatefulWidget {
   final ShapeBorder? shapeBorder;
   final EdgeInsets contentPadding;
 
-  final Duration animationDuration;
   final VoidCallback? onToolTipClick;
   final VoidCallback? onTargetClick;
   final VoidCallback? onFinishClick;
@@ -69,7 +68,6 @@ class Showcase extends StatefulWidget {
     this.onTargetClick,
     this.onFinishClick,
     this.disposeOnTap,
-    this.animationDuration = const Duration(milliseconds: 2000),
     this.disableAnimation = true,
     this.contentPadding = const EdgeInsets.all(16),
     this.onToolTipClick,
@@ -260,7 +258,6 @@ class _ShowcaseState extends State<Showcase> {
                 onTooltipTap: _getOnTooltipTap,
                 contentPadding: widget.contentPadding,
                 disableAnimation: widget.disableAnimation,
-                animationDuration: widget.animationDuration,
                 actionButton: widget.withStep
                     ? ActionWithStep(
                         length: _lengthShowcase(),

@@ -32,7 +32,6 @@ class ToolTipWidget extends StatefulWidget {
   final Size? screenSize;
   final VoidCallback? onTooltipTap;
   final EdgeInsets? contentPadding;
-  final Duration animationDuration;
   final bool disableAnimation;
   final Widget actionButton;
   final Widget content;
@@ -42,7 +41,6 @@ class ToolTipWidget extends StatefulWidget {
     required this.offset,
     required this.screenSize,
     required this.onTooltipTap,
-    required this.animationDuration,
     required this.actionButton,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
     required this.disableAnimation,
@@ -58,9 +56,6 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
   Offset? position;
 
   bool isArrowUp = false;
-
-  late final AnimationController _parentController;
-  late final Animation<double> _curvedAnimation;
 
   bool isCloseToTopOrBottom(Offset position) {
     /// TODO need to use screen utils?
@@ -85,40 +80,6 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
   /// TODO set toolTips width
   double _getTooltipWidth() {
     return 328.w;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _parentController = AnimationController(
-      duration: widget.animationDuration,
-      vsync: this,
-    )..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _parentController.reverse();
-        }
-        if (_parentController.isDismissed) {
-          if (!widget.disableAnimation) {
-            _parentController.forward();
-          }
-        }
-      });
-
-    _curvedAnimation = CurvedAnimation(
-      parent: _parentController,
-      curve: Curves.easeInOut,
-    );
-
-    if (!widget.disableAnimation) {
-      _parentController.forward();
-    }
-  }
-
-  @override
-  void dispose() {
-    _parentController.dispose();
-
-    super.dispose();
   }
 
   @override
@@ -148,67 +109,61 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
       right: 0,
       child: FractionalTranslation(
         translation: Offset(0.0, contentFractionalOffset as double),
-        child: SlideTransition(
-          position: Tween<Offset>(
-            begin: Offset(0.0, contentFractionalOffset / 10),
-            end: Offset(0.0, 0.100),
-          ).animate(_curvedAnimation),
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              padding: EdgeInsets.only(
-                top: paddingTop - (isArrowUp ? arrowHeight : 0),
-                bottom: paddingBottom - (isArrowUp ? 0 : arrowHeight),
-              ),
-              child: Stack(
-                alignment: isArrowUp ? Alignment.topLeft : Alignment.bottomLeft,
-                children: [
-                  Positioned(
-                    left: (widget.position!.getCenter() - (arrowWidth / 2)),
-                    child: CustomPaint(
-                      painter: _Arrow(
-                        /// TODO need to use screen utils?
-                        strokeWidth: 10,
-                        paintingStyle: PaintingStyle.fill,
-                        isUpArrow: isArrowUp,
-                      ),
-                      child: SizedBox(
-                        height: arrowHeight,
-                        width: arrowWidth,
-                      ),
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.only(
+              top: paddingTop - (isArrowUp ? arrowHeight : 0),
+              bottom: paddingBottom - (isArrowUp ? 0 : arrowHeight),
+            ),
+            child: Stack(
+              alignment: isArrowUp ? Alignment.topLeft : Alignment.bottomLeft,
+              children: [
+                Positioned(
+                  left: (widget.position!.getCenter() - (arrowWidth / 2)),
+                  child: CustomPaint(
+                    painter: _Arrow(
+                      /// TODO need to use screen utils?
+                      strokeWidth: 10,
+                      paintingStyle: PaintingStyle.fill,
+                      isUpArrow: isArrowUp,
+                    ),
+                    child: SizedBox(
+                      height: arrowHeight,
+                      width: arrowWidth,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: isArrowUp ? arrowHeight - 1 : 0,
-                      bottom: isArrowUp ? 0 : arrowHeight - 1,
-                    ),
-                    child: GestureDetector(
-                      onTap: widget.onTooltipTap,
-                      child: Center(
-                        child: Container(
-                          width: _getTooltipWidth(),
-                          padding: widget.contentPadding,
-                          decoration: BoxDecoration(
-                            color: kShowCaseNeutral800,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              widget.content,
-                              SizedBox(height: 24),
-                              widget.actionButton,
-                            ],
-                          ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: isArrowUp ? arrowHeight - 1 : 0,
+                    bottom: isArrowUp ? 0 : arrowHeight - 1,
+                  ),
+                  child: GestureDetector(
+                    onTap: widget.onTooltipTap,
+                    child: Center(
+                      child: Container(
+                        width: _getTooltipWidth(),
+                        padding: widget.contentPadding,
+                        decoration: BoxDecoration(
+                          color: kShowCaseNeutral800,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            widget.content,
+                            SizedBox(height: 24),
+                            widget.actionButton,
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
