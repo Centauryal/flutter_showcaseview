@@ -31,7 +31,6 @@ class ToolTipWidget extends StatefulWidget {
   final Offset? offset;
   final Size? screenSize;
   final EdgeInsets? contentPadding;
-  final bool disableAnimation;
   final Widget actionButton;
   final Widget content;
 
@@ -41,7 +40,6 @@ class ToolTipWidget extends StatefulWidget {
     required this.screenSize,
     required this.actionButton,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
-    required this.disableAnimation,
     required this.content,
   });
 

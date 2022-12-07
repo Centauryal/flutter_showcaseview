@@ -25,6 +25,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../utils/colors.dart';
 import 'get_position.dart';
@@ -41,12 +42,8 @@ class Showcase extends StatefulWidget {
   final bool withStep;
   final ShapeBorder? shapeBorder;
   final EdgeInsets contentPadding;
-
   final VoidCallback? onFinishClick;
-  final bool? disposeOnTap;
-  final bool disableAnimation;
   final EdgeInsets overlayPadding;
-  final Size sizeIndicatorStep;
   final Widget infoContent;
 
   /// Defines blur value.
@@ -64,12 +61,9 @@ class Showcase extends StatefulWidget {
     this.withStep = false,
     this.shapeBorder,
     this.onFinishClick,
-    this.disposeOnTap,
-    this.disableAnimation = true,
     this.contentPadding = const EdgeInsets.all(16),
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
-    this.sizeIndicatorStep = const Size(8, 8),
   });
 
   @override
@@ -222,7 +216,6 @@ class _ShowcaseState extends State<Showcase> {
                 offset: offset,
                 screenSize: screenSize,
                 contentPadding: widget.contentPadding,
-                disableAnimation: widget.disableAnimation,
                 actionButton: widget.withStep
                     ? ActionWithStep(
                         length: _lengthShowcase(),
@@ -232,7 +225,6 @@ class _ShowcaseState extends State<Showcase> {
                         previousButton: _previousTap,
                         finishButton: _dismissTap,
                         textButtonStyle: TextStyle(),
-                        sizeIndicatorStep: widget.sizeIndicatorStep,
                       )
                     : ActionWithOkButton(
                         okButton: _dismissTap,
@@ -319,19 +311,17 @@ class ActionWithStep extends StatelessWidget {
   final VoidCallback previousButton;
   final VoidCallback finishButton;
   final TextStyle? textButtonStyle;
-  final Size sizeIndicatorStep;
 
-  const ActionWithStep(
-      {Key? key,
-      required this.length,
-      required this.currentPage,
-      required this.skipButton,
-      required this.nextButton,
-      required this.previousButton,
-      required this.finishButton,
-      required this.textButtonStyle,
-      required this.sizeIndicatorStep})
-      : super(key: key);
+  const ActionWithStep({
+    Key? key,
+    required this.length,
+    required this.currentPage,
+    required this.skipButton,
+    required this.nextButton,
+    required this.previousButton,
+    required this.finishButton,
+    required this.textButtonStyle,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -344,10 +334,10 @@ class ActionWithStep extends StatelessWidget {
           children: List.generate(
               length ?? 0,
               (index) => Padding(
-                    padding: const EdgeInsets.only(right: 3),
+                    padding: EdgeInsets.only(right: 8.w),
                     child: Container(
-                      height: sizeIndicatorStep.height,
-                      width: sizeIndicatorStep.width,
+                      height: 8.w,
+                      width: 8.w,
                       decoration: BoxDecoration(
                           color: index == currentPage
                               ? kShowCaseLightAccent
@@ -369,7 +359,7 @@ class ActionWithStep extends StatelessWidget {
                         ?.copyWith(color: kShowCaseLightAccent),
               ),
             ),
-            SizedBox(width: 15),
+            SizedBox(width: 14.w),
             currentPage == lengthLast
                 ? Row(
                     children: [
@@ -384,6 +374,12 @@ class ActionWithStep extends StatelessWidget {
                           ),
                         ),
                         child: IconButton(
+                          constraints: BoxConstraints(
+                            maxHeight: 32.w,
+                            maxWidth: 32.w,
+                          ),
+                          padding: EdgeInsets.all(4.w),
+                          iconSize: 24.w,
                           onPressed: previousButton,
                           icon: Center(
                             child: Icon(
@@ -393,7 +389,7 @@ class ActionWithStep extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
@@ -401,6 +397,12 @@ class ActionWithStep extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
+                          constraints: BoxConstraints(
+                            maxHeight: 32.w,
+                            maxWidth: 32.w,
+                          ),
+                          padding: EdgeInsets.all(4.w),
+                          iconSize: 24.w,
                           onPressed: finishButton,
                           icon: Center(
                             child: Icon(
@@ -419,6 +421,12 @@ class ActionWithStep extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
+                      constraints: BoxConstraints(
+                        maxHeight: 32.w,
+                        maxWidth: 32.w,
+                      ),
+                      padding: EdgeInsets.all(4.w),
+                      iconSize: 24.w,
                       onPressed: nextButton,
                       icon: Center(
                         child: Icon(

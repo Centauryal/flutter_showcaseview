@@ -286,7 +286,6 @@ class _MailPageState extends State<MailPage> {
         child: Showcase(
           key: _three,
           infoContent: const Text('content'),
-          disposeOnTap: true,
           child: Container(
             padding:
                 const EdgeInsets.only(left: 6, right: 16, top: 5, bottom: 5),
