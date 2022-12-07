@@ -49,7 +49,6 @@ class _DetailState extends State<Detail> {
                   Showcase(
                     key: _one,
                     infoContent: const Text('content'),
-                    colorAccent: Colors.orange,
                     child: InkWell(
                       onTap: () {},
                       child: const Text(

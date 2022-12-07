@@ -43,7 +43,6 @@ class Showcase extends StatefulWidget {
   final EdgeInsets contentPadding;
 
   final Color textColor;
-  final Color colorAccent;
   final bool showArrow;
   final double? height;
   final double? width;
@@ -71,8 +70,7 @@ class Showcase extends StatefulWidget {
     required this.infoContent,
     this.withStep = false,
     this.shapeBorder,
-    this.textColor = kNeutral300,
-    required this.colorAccent,
+    this.textColor = kShowCaseNeutral300,
     this.showArrow = true,
     this.onTargetClick,
     this.onFinishClick,
@@ -283,7 +281,6 @@ class _ShowcaseState extends State<Showcase> {
                         nextButton: _nextIfAny,
                         previousButton: _previousTap,
                         finishButton: _dismissTap,
-                        colorAccent: widget.colorAccent,
                         textButtonStyle: TextStyle(),
                         sizeIndicatorStep: widget.sizeIndicatorStep,
                       )
@@ -362,7 +359,7 @@ class ActionWithOkButton extends StatelessWidget {
         onPressed: okButton,
         child: Text(
           'oke'.toUpperCase(),
-          style: TextStyle(color: kNeutral1000),
+          style: TextStyle(color: kShowCaseNeutral1000),
         ),
       ),
     );
@@ -376,7 +373,6 @@ class ActionWithStep extends StatelessWidget {
   final VoidCallback nextButton;
   final VoidCallback previousButton;
   final VoidCallback finishButton;
-  final Color colorAccent;
   final TextStyle? textButtonStyle;
   final Size sizeIndicatorStep;
 
@@ -388,7 +384,6 @@ class ActionWithStep extends StatelessWidget {
       required this.nextButton,
       required this.previousButton,
       required this.finishButton,
-      required this.colorAccent,
       required this.textButtonStyle,
       required this.sizeIndicatorStep})
       : super(key: key);
@@ -409,7 +404,9 @@ class ActionWithStep extends StatelessWidget {
                       height: sizeIndicatorStep.height,
                       width: sizeIndicatorStep.width,
                       decoration: BoxDecoration(
-                          color: index == currentPage ? colorAccent : kGrey,
+                          color: index == currentPage
+                              ? kShowCaseLightAccent
+                              : kShowCaseGrey,
                           shape: BoxShape.circle),
                     ),
                   )),
@@ -420,11 +417,11 @@ class ActionWithStep extends StatelessWidget {
               onTap: skipButton,
               child: Text(
                 'lewati'.toUpperCase(),
-                style: textButtonStyle?.copyWith(color: colorAccent) ??
+                style: textButtonStyle?.copyWith(color: kShowCaseLightAccent) ??
                     Theme.of(context)
                         .textTheme
                         .caption
-                        ?.copyWith(color: colorAccent),
+                        ?.copyWith(color: kShowCaseLightAccent),
               ),
             ),
             SizedBox(width: 15),
@@ -437,7 +434,7 @@ class ActionWithStep extends StatelessWidget {
                           color: Colors.transparent,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: kNeutral0,
+                            color: kShowCaseNeutral0,
                             width: 1,
                           ),
                         ),
@@ -446,7 +443,7 @@ class ActionWithStep extends StatelessWidget {
                           icon: Center(
                             child: Icon(
                               Icons.chevron_left,
-                              color: kNeutral0,
+                              color: kShowCaseNeutral0,
                             ),
                           ),
                         ),
@@ -455,7 +452,7 @@ class ActionWithStep extends StatelessWidget {
                       Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: colorAccent,
+                          color: kShowCaseLightAccent,
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
@@ -463,7 +460,7 @@ class ActionWithStep extends StatelessWidget {
                           icon: Center(
                             child: Icon(
                               Icons.check,
-                              color: kNeutral1000,
+                              color: kShowCaseNeutral1000,
                             ),
                           ),
                         ),
@@ -473,7 +470,7 @@ class ActionWithStep extends StatelessWidget {
                 : Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: colorAccent,
+                      color: kShowCaseLightAccent,
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -481,7 +478,7 @@ class ActionWithStep extends StatelessWidget {
                       icon: Center(
                         child: Icon(
                           Icons.chevron_right,
-                          color: kNeutral1000,
+                          color: kShowCaseNeutral1000,
                         ),
                       ),
                     ),

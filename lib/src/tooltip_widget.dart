@@ -22,8 +22,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:showcaseview/utils/colors.dart';
 
+import '../utils/colors.dart';
 import 'get_position.dart';
 
 class ToolTipWidget extends StatefulWidget {
@@ -204,7 +204,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                           width: _getTooltipWidth(),
                           padding: widget.contentPadding,
                           decoration: BoxDecoration(
-                            color: kNeutral800,
+                            color: kShowCaseNeutral800,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Column(

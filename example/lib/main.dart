@@ -170,7 +170,6 @@ class _MailPageState extends State<MailPage> {
                                     Showcase(
                                       key: _one,
                                       infoContent: const Text('content'),
-                                      colorAccent: Colors.orange,
                                       child: Icon(
                                         Icons.menu,
                                         color: Theme.of(context).primaryColor,
@@ -204,7 +203,6 @@ class _MailPageState extends State<MailPage> {
                       overlayPadding: const EdgeInsets.all(5),
                       key: _two,
                       infoContent: const Text('content'),
-                      colorAccent: Colors.orange,
                       textColor: Colors.white,
                       shapeBorder: const CircleBorder(),
                       child: Container(
@@ -257,7 +255,6 @@ class _MailPageState extends State<MailPage> {
       floatingActionButton: Showcase(
         key: _five,
         infoContent: const Text('content'),
-        colorAccent: Colors.orange,
         shapeBorder: const CircleBorder(),
         child: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
@@ -291,7 +288,6 @@ class _MailPageState extends State<MailPage> {
           key: _three,
           infoContent: const Text('content'),
           disposeOnTap: true,
-          colorAccent: Colors.orange,
           onTargetClick: () {
             Navigator.push<void>(
               context,
