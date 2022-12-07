@@ -21,9 +21,7 @@
  */
 
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -46,14 +44,6 @@ class Showcase extends StatefulWidget {
   final EdgeInsets overlayPadding;
   final Widget infoContent;
 
-  /// Defines blur value.
-  /// This will blur the background while displaying showcase.
-  ///
-  /// If null value is provided,
-  /// [ShowCaseWidget.defaultBlurValue] will be considered.
-  ///
-  final double? blurValue;
-
   const Showcase({
     required this.key,
     required this.child,
@@ -63,7 +53,6 @@ class Showcase extends StatefulWidget {
     this.onFinishClick,
     this.contentPadding = const EdgeInsets.all(16),
     this.overlayPadding = EdgeInsets.zero,
-    this.blurValue,
   });
 
   @override
@@ -162,15 +151,6 @@ class _ShowcaseState extends State<Showcase> {
     Rect rectBound,
     Size screenSize,
   ) {
-    var blur = 0.0;
-    if (_showShowCase) {
-      blur = widget.blurValue ?? (ShowCaseWidget.of(context)?.blurValue) ?? 0;
-    }
-
-    // Set blur to 0 if application is running on web and
-    // provided blur is less than 0.
-    blur = kIsWeb && blur < 0 ? 0 : blur;
-
     return _showShowCase
         ? Stack(
             children: [
@@ -186,24 +166,13 @@ class _ShowcaseState extends State<Showcase> {
                     isCircle: widget.shapeBorder == CircleBorder(),
                     overlayPadding: widget.overlayPadding,
                   ),
-                  child: blur != 0
-                      ? BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
-                            decoration: BoxDecoration(
-                              color: Colors.black45.withOpacity(0.75),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          decoration: BoxDecoration(
-                            color: Colors.black45.withOpacity(0.75),
-                          ),
-                        ),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      color: Colors.black45.withOpacity(0.75),
+                    ),
+                  ),
                 ),
               ),
               _TargetWidget(
