@@ -203,7 +203,6 @@ class _MailPageState extends State<MailPage> {
                       overlayPadding: const EdgeInsets.all(5),
                       key: _two,
                       infoContent: const Text('content'),
-                      textColor: Colors.white,
                       shapeBorder: const CircleBorder(),
                       child: Container(
                         padding: const EdgeInsets.all(5),

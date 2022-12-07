@@ -30,10 +30,6 @@ class ToolTipWidget extends StatefulWidget {
   final GetPosition? position;
   final Offset? offset;
   final Size? screenSize;
-  final Color? textColor;
-  final bool showArrow;
-  final double? contentHeight;
-  final double? contentWidth;
   final VoidCallback? onTooltipTap;
   final EdgeInsets? contentPadding;
   final Duration animationDuration;
@@ -45,10 +41,6 @@ class ToolTipWidget extends StatefulWidget {
     required this.position,
     required this.offset,
     required this.screenSize,
-    required this.textColor,
-    required this.showArrow,
-    required this.contentHeight,
-    required this.contentWidth,
     required this.onTooltipTap,
     required this.animationDuration,
     required this.actionButton,
@@ -71,8 +63,8 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
   late final Animation<double> _curvedAnimation;
 
   bool isCloseToTopOrBottom(Offset position) {
+    /// TODO need to use screen utils?
     var height = 175.0;
-    height = widget.contentHeight ?? height;
     final bottomPosition =
         position.dy + ((widget.position?.getHeight() ?? 0) / 2);
     final topPosition = position.dy - ((widget.position?.getHeight() ?? 0) / 2);
@@ -146,11 +138,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
     var paddingTop = isArrowUp ? 22.0 : 0.0;
     var paddingBottom = isArrowUp ? 0.0 : 27.0;
 
-    if (!widget.showArrow) {
-      paddingTop = 10;
-      paddingBottom = 10;
-    }
-
+    /// TODO need to use screen utils?
     final arrowWidth = 18.0;
     final arrowHeight = 9.0;
 
@@ -168,30 +156,28 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
           child: Material(
             color: Colors.transparent,
             child: Container(
-              padding: widget.showArrow
-                  ? EdgeInsets.only(
-                      top: paddingTop - (isArrowUp ? arrowHeight : 0),
-                      bottom: paddingBottom - (isArrowUp ? 0 : arrowHeight),
-                    )
-                  : null,
+              padding: EdgeInsets.only(
+                top: paddingTop - (isArrowUp ? arrowHeight : 0),
+                bottom: paddingBottom - (isArrowUp ? 0 : arrowHeight),
+              ),
               child: Stack(
                 alignment: isArrowUp ? Alignment.topLeft : Alignment.bottomLeft,
                 children: [
-                  if (widget.showArrow)
-                    Positioned(
-                      left: (widget.position!.getCenter() - (arrowWidth / 2)),
-                      child: CustomPaint(
-                        painter: _Arrow(
-                          strokeWidth: 10,
-                          paintingStyle: PaintingStyle.fill,
-                          isUpArrow: isArrowUp,
-                        ),
-                        child: SizedBox(
-                          height: arrowHeight,
-                          width: arrowWidth,
-                        ),
+                  Positioned(
+                    left: (widget.position!.getCenter() - (arrowWidth / 2)),
+                    child: CustomPaint(
+                      painter: _Arrow(
+                        /// TODO need to use screen utils?
+                        strokeWidth: 10,
+                        paintingStyle: PaintingStyle.fill,
+                        isUpArrow: isArrowUp,
+                      ),
+                      child: SizedBox(
+                        height: arrowHeight,
+                        width: arrowWidth,
                       ),
                     ),
+                  ),
                   Padding(
                     padding: EdgeInsets.only(
                       top: isArrowUp ? arrowHeight - 1 : 0,
@@ -232,21 +218,19 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
 }
 
 class _Arrow extends CustomPainter {
-  final Color strokeColor;
   final PaintingStyle paintingStyle;
   final double strokeWidth;
   final bool isUpArrow;
 
   _Arrow(
-      {this.strokeColor = Colors.black,
-      this.strokeWidth = 3,
+      {this.strokeWidth = 3,
       this.paintingStyle = PaintingStyle.stroke,
       this.isUpArrow = true});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = strokeColor
+      ..color = kShowCaseNeutral800
       ..strokeWidth = strokeWidth
       ..style = paintingStyle;
 
@@ -271,8 +255,7 @@ class _Arrow extends CustomPainter {
 
   @override
   bool shouldRepaint(_Arrow oldDelegate) {
-    return oldDelegate.strokeColor != strokeColor ||
-        oldDelegate.paintingStyle != paintingStyle ||
+    return oldDelegate.paintingStyle != paintingStyle ||
         oldDelegate.strokeWidth != strokeWidth;
   }
 }

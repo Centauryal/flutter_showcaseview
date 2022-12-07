@@ -42,10 +42,6 @@ class Showcase extends StatefulWidget {
   final ShapeBorder? shapeBorder;
   final EdgeInsets contentPadding;
 
-  final Color textColor;
-  final bool showArrow;
-  final double? height;
-  final double? width;
   final Duration animationDuration;
   final VoidCallback? onToolTipClick;
   final VoidCallback? onTargetClick;
@@ -70,8 +66,6 @@ class Showcase extends StatefulWidget {
     required this.infoContent,
     this.withStep = false,
     this.shapeBorder,
-    this.textColor = kShowCaseNeutral300,
-    this.showArrow = true,
     this.onTargetClick,
     this.onFinishClick,
     this.disposeOnTap,
@@ -82,9 +76,7 @@ class Showcase extends StatefulWidget {
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
     this.sizeIndicatorStep = const Size(8, 8),
-  })  : height = null,
-        width = null,
-        assert(
+  })  : assert(
             onTargetClick == null
                 ? true
                 : (disposeOnTap == null ? false : true),
@@ -265,10 +257,6 @@ class _ShowcaseState extends State<Showcase> {
                 position: position,
                 offset: offset,
                 screenSize: screenSize,
-                textColor: widget.textColor,
-                showArrow: widget.showArrow,
-                contentHeight: widget.height,
-                contentWidth: widget.width,
                 onTooltipTap: _getOnTooltipTap,
                 contentPadding: widget.contentPadding,
                 disableAnimation: widget.disableAnimation,
