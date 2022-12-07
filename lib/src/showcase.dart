@@ -40,13 +40,8 @@ class Showcase extends StatefulWidget {
   final Widget child;
   final bool withStep;
   final ShapeBorder? shapeBorder;
-  final BorderRadius? radius;
-  final TextStyle? textButtonStyle;
   final EdgeInsets contentPadding;
-  final Color overlayColor;
-  final double overlayOpacity;
-  final Widget? container;
-  final Color showcaseBackgroundColor;
+
   final Color textColor;
   final Color colorAccent;
   final bool showArrow;
@@ -60,7 +55,7 @@ class Showcase extends StatefulWidget {
   final bool disableAnimation;
   final EdgeInsets overlayPadding;
   final Size sizeIndicatorStep;
-  final Widget content;
+  final Widget infoContent;
 
   /// Defines blur value.
   /// This will blur the background while displaying showcase.
@@ -73,13 +68,9 @@ class Showcase extends StatefulWidget {
   const Showcase({
     required this.key,
     required this.child,
-    required this.content,
+    required this.infoContent,
     this.withStep = false,
     this.shapeBorder,
-    this.overlayColor = Colors.black45,
-    this.overlayOpacity = 0.75,
-    this.textButtonStyle,
-    this.showcaseBackgroundColor = kNeutral800,
     this.textColor = kNeutral300,
     required this.colorAccent,
     this.showArrow = true,
@@ -92,13 +83,9 @@ class Showcase extends StatefulWidget {
     this.onToolTipClick,
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
-    this.radius,
     this.sizeIndicatorStep = const Size(8, 8),
   })  : height = null,
         width = null,
-        container = null,
-        assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
-            "overlay opacity must be between 0 and 1."),
         assert(
             onTargetClick == null
                 ? true
@@ -244,7 +231,6 @@ class _ShowcaseState extends State<Showcase> {
                   clipper: RRectClipper(
                     area: rectBound,
                     isCircle: widget.shapeBorder == CircleBorder(),
-                    radius: widget.radius,
                     overlayPadding: widget.overlayPadding,
                   ),
                   child: blur != 0
@@ -254,8 +240,7 @@ class _ShowcaseState extends State<Showcase> {
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
-                              color: widget.overlayColor
-                                  .withOpacity(widget.overlayOpacity),
+                              color: Colors.black45.withOpacity(0.75),
                             ),
                           ),
                         )
@@ -263,8 +248,7 @@ class _ShowcaseState extends State<Showcase> {
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
                           decoration: BoxDecoration(
-                            color: widget.overlayColor
-                                .withOpacity(widget.overlayOpacity),
+                            color: Colors.black45.withOpacity(0.75),
                           ),
                         ),
                 ),
@@ -283,8 +267,6 @@ class _ShowcaseState extends State<Showcase> {
                 position: position,
                 offset: offset,
                 screenSize: screenSize,
-                container: widget.container,
-                tooltipColor: widget.showcaseBackgroundColor,
                 textColor: widget.textColor,
                 showArrow: widget.showArrow,
                 contentHeight: widget.height,
@@ -302,13 +284,13 @@ class _ShowcaseState extends State<Showcase> {
                         previousButton: _previousTap,
                         finishButton: _dismissTap,
                         colorAccent: widget.colorAccent,
-                        textButtonStyle: widget.textButtonStyle ?? TextStyle(),
+                        textButtonStyle: TextStyle(),
                         sizeIndicatorStep: widget.sizeIndicatorStep,
                       )
                     : ActionWithOkButton(
                         okButton: _dismissTap,
                       ),
-                content: widget.content,
+                content: widget.infoContent,
               ),
             ],
           )

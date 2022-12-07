@@ -169,7 +169,7 @@ class _MailPageState extends State<MailPage> {
                                   children: <Widget>[
                                     Showcase(
                                       key: _one,
-                                      content: const Text('content'),
+                                      infoContent: const Text('content'),
                                       colorAccent: Colors.orange,
                                       child: Icon(
                                         Icons.menu,
@@ -203,9 +203,8 @@ class _MailPageState extends State<MailPage> {
                     Showcase(
                       overlayPadding: const EdgeInsets.all(5),
                       key: _two,
-                      content: const Text('content'),
+                      infoContent: const Text('content'),
                       colorAccent: Colors.orange,
-                      showcaseBackgroundColor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       shapeBorder: const CircleBorder(),
                       child: Container(
@@ -257,7 +256,7 @@ class _MailPageState extends State<MailPage> {
       ),
       floatingActionButton: Showcase(
         key: _five,
-        content: const Text('content'),
+        infoContent: const Text('content'),
         colorAccent: Colors.orange,
         shapeBorder: const CircleBorder(),
         child: FloatingActionButton(
@@ -290,7 +289,7 @@ class _MailPageState extends State<MailPage> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Showcase(
           key: _three,
-          content: const Text('content'),
+          infoContent: const Text('content'),
           disposeOnTap: true,
           colorAccent: Colors.orange,
           onTargetClick: () {

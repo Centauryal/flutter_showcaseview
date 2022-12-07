@@ -22,16 +22,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:showcaseview/utils/colors.dart';
 
 import 'get_position.dart';
-import 'measure_size.dart';
 
 class ToolTipWidget extends StatefulWidget {
   final GetPosition? position;
   final Offset? offset;
   final Size? screenSize;
-  final Widget? container;
-  final Color? tooltipColor;
   final Color? textColor;
   final bool showArrow;
   final double? contentHeight;
@@ -47,8 +45,6 @@ class ToolTipWidget extends StatefulWidget {
     required this.position,
     required this.offset,
     required this.screenSize,
-    required this.container,
-    required this.tooltipColor,
     required this.textColor,
     required this.showArrow,
     required this.contentHeight,
@@ -97,16 +93,6 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
   /// TODO set toolTips width
   double _getTooltipWidth() {
     return 328.w;
-  }
-
-  double _getSpace() {
-    var space = widget.position!.getCenter() - (widget.contentWidth! / 2);
-    if (space + widget.contentWidth! > widget.screenSize!.width) {
-      space = widget.screenSize!.width - widget.contentWidth! - 8;
-    } else if (space < (widget.contentWidth! / 2)) {
-      space = 16;
-    }
-    return space;
   }
 
   @override
@@ -168,128 +154,80 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
     final arrowWidth = 18.0;
     final arrowHeight = 9.0;
 
-    if (widget.container == null) {
-      return Positioned(
-        top: contentY,
-        left: 0,
-        right: 0,
-        child: FractionalTranslation(
-          translation: Offset(0.0, contentFractionalOffset as double),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset(0.0, contentFractionalOffset / 10),
-              end: Offset(0.0, 0.100),
-            ).animate(_curvedAnimation),
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                padding: widget.showArrow
-                    ? EdgeInsets.only(
-                        top: paddingTop - (isArrowUp ? arrowHeight : 0),
-                        bottom: paddingBottom - (isArrowUp ? 0 : arrowHeight),
-                      )
-                    : null,
-                child: Stack(
-                  alignment:
-                      isArrowUp ? Alignment.topLeft : Alignment.bottomLeft,
-                  children: [
-                    if (widget.showArrow)
-                      Positioned(
-                        left: (widget.position!.getCenter() - (arrowWidth / 2)),
-                        child: CustomPaint(
-                          painter: _Arrow(
-                            strokeColor: widget.tooltipColor!,
-                            strokeWidth: 10,
-                            paintingStyle: PaintingStyle.fill,
-                            isUpArrow: isArrowUp,
-                          ),
-                          child: SizedBox(
-                            height: arrowHeight,
-                            width: arrowWidth,
-                          ),
+    return Positioned(
+      top: contentY,
+      left: 0,
+      right: 0,
+      child: FractionalTranslation(
+        translation: Offset(0.0, contentFractionalOffset as double),
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset(0.0, contentFractionalOffset / 10),
+            end: Offset(0.0, 0.100),
+          ).animate(_curvedAnimation),
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              padding: widget.showArrow
+                  ? EdgeInsets.only(
+                      top: paddingTop - (isArrowUp ? arrowHeight : 0),
+                      bottom: paddingBottom - (isArrowUp ? 0 : arrowHeight),
+                    )
+                  : null,
+              child: Stack(
+                alignment: isArrowUp ? Alignment.topLeft : Alignment.bottomLeft,
+                children: [
+                  if (widget.showArrow)
+                    Positioned(
+                      left: (widget.position!.getCenter() - (arrowWidth / 2)),
+                      child: CustomPaint(
+                        painter: _Arrow(
+                          strokeWidth: 10,
+                          paintingStyle: PaintingStyle.fill,
+                          isUpArrow: isArrowUp,
+                        ),
+                        child: SizedBox(
+                          height: arrowHeight,
+                          width: arrowWidth,
                         ),
                       ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: isArrowUp ? arrowHeight - 1 : 0,
-                        bottom: isArrowUp ? 0 : arrowHeight - 1,
-                      ),
-                      child: GestureDetector(
-                        onTap: widget.onTooltipTap,
-                        child: Center(
-                          child: Container(
-                            width: _getTooltipWidth(),
-                            padding: widget.contentPadding,
-                            decoration: BoxDecoration(
-                              color: widget.tooltipColor,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                widget.content,
-                                SizedBox(height: 24),
-                                widget.actionButton,
-                              ],
-                            ),
+                    ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: isArrowUp ? arrowHeight - 1 : 0,
+                      bottom: isArrowUp ? 0 : arrowHeight - 1,
+                    ),
+                    child: GestureDetector(
+                      onTap: widget.onTooltipTap,
+                      child: Center(
+                        child: Container(
+                          width: _getTooltipWidth(),
+                          padding: widget.contentPadding,
+                          decoration: BoxDecoration(
+                            color: kNeutral800,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              widget.content,
+                              SizedBox(height: 24),
+                              widget.actionButton,
+                            ],
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-      );
-    } else {
-      return Stack(
-        children: <Widget>[
-          Positioned(
-            left: _getSpace(),
-            top: contentY - 10,
-            child: FractionalTranslation(
-              translation: Offset(0.0, contentFractionalOffset as double),
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: Offset(0.0, contentFractionalOffset / 10),
-                  end: !widget.showArrow && !isArrowUp
-                      ? Offset(0.0, 0.0)
-                      : Offset(0.0, 0.100),
-                ).animate(_curvedAnimation),
-                child: Material(
-                  color: Colors.transparent,
-                  child: GestureDetector(
-                    onTap: widget.onTooltipTap,
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        top: paddingTop,
-                      ),
-                      color: Colors.transparent,
-                      child: Center(
-                        child: MeasureSize(
-                            onSizeChange: (size) {
-                              setState(() {
-                                var tempPos = position;
-                                tempPos = Offset(
-                                    position!.dx, position!.dy + size!.height);
-                                position = tempPos;
-                              });
-                            },
-                            child: widget.container),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
+      ),
+    );
   }
 }
 
