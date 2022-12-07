@@ -42,8 +42,6 @@ class Showcase extends StatefulWidget {
   final ShapeBorder? shapeBorder;
   final EdgeInsets contentPadding;
 
-  final VoidCallback? onToolTipClick;
-  final VoidCallback? onTargetClick;
   final VoidCallback? onFinishClick;
   final bool? disposeOnTap;
   final bool disableAnimation;
@@ -65,25 +63,14 @@ class Showcase extends StatefulWidget {
     required this.infoContent,
     this.withStep = false,
     this.shapeBorder,
-    this.onTargetClick,
     this.onFinishClick,
     this.disposeOnTap,
     this.disableAnimation = true,
     this.contentPadding = const EdgeInsets.all(16),
-    this.onToolTipClick,
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
     this.sizeIndicatorStep = const Size(8, 8),
-  })  : assert(
-            onTargetClick == null
-                ? true
-                : (disposeOnTap == null ? false : true),
-            "disposeOnTap is required if you're using onTargetClick"),
-        assert(
-            disposeOnTap == null
-                ? true
-                : (onTargetClick == null ? false : true),
-            "onTargetClick is required if you're using disposeOnTap");
+  });
 
   @override
   _ShowcaseState createState() => _ShowcaseState();
@@ -154,15 +141,6 @@ class _ShowcaseState extends State<Showcase> {
     ShowCaseWidget.of(context)!.completed(widget.key);
   }
 
-  void _getOnTargetTap() {
-    if (widget.disposeOnTap == true) {
-      ShowCaseWidget.of(context)!.dismiss();
-      widget.onTargetClick!();
-    } else {
-      (widget.onTargetClick ?? _nextIfAny).call();
-    }
-  }
-
   void _dismissTap() {
     widget.onFinishClick?.call();
     ShowCaseWidget.of(context)!.dismiss();
@@ -178,13 +156,6 @@ class _ShowcaseState extends State<Showcase> {
 
   int? _currentPageShowcase() {
     return ShowCaseWidget.of(context)?.activeWidgetId;
-  }
-
-  void _getOnTooltipTap() {
-    if (widget.disposeOnTap == true) {
-      ShowCaseWidget.of(context)!.dismiss();
-    }
-    widget.onToolTipClick?.call();
   }
 
   bool disableBarrierInteraction() {
@@ -244,18 +215,12 @@ class _ShowcaseState extends State<Showcase> {
               _TargetWidget(
                 offset: offset,
                 size: size,
-                onTap: () {
-                  if (disableBarrierInteraction()) {
-                    _getOnTargetTap;
-                  }
-                },
                 shapeBorder: widget.shapeBorder,
               ),
               ToolTipWidget(
                 position: position,
                 offset: offset,
                 screenSize: screenSize,
-                onTooltipTap: _getOnTooltipTap,
                 contentPadding: widget.contentPadding,
                 disableAnimation: widget.disableAnimation,
                 actionButton: widget.withStep
@@ -284,7 +249,6 @@ class _TargetWidget extends StatelessWidget {
   final Offset offset;
   final Size? size;
   final Animation<double>? widthAnimation;
-  final VoidCallback? onTap;
   final ShapeBorder? shapeBorder;
   final BorderRadius? radius;
 
@@ -293,7 +257,6 @@ class _TargetWidget extends StatelessWidget {
       required this.offset,
       this.size,
       this.widthAnimation,
-      this.onTap,
       this.shapeBorder,
       this.radius})
       : super(key: key);
@@ -305,21 +268,18 @@ class _TargetWidget extends StatelessWidget {
       left: offset.dx,
       child: FractionalTranslation(
         translation: const Offset(-0.5, -0.5),
-        child: GestureDetector(
-          onTap: onTap,
-          child: Container(
-            height: size!.height + 16,
-            width: size!.width + 16,
-            decoration: ShapeDecoration(
-              shape: radius != null
-                  ? RoundedRectangleBorder(borderRadius: radius!)
-                  : shapeBorder ??
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
+        child: Container(
+          height: size!.height + 16,
+          width: size!.width + 16,
+          decoration: ShapeDecoration(
+            shape: radius != null
+                ? RoundedRectangleBorder(borderRadius: radius!)
+                : shapeBorder ??
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
                       ),
-            ),
+                    ),
           ),
         ),
       ),

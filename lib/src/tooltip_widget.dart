@@ -30,7 +30,6 @@ class ToolTipWidget extends StatefulWidget {
   final GetPosition? position;
   final Offset? offset;
   final Size? screenSize;
-  final VoidCallback? onTooltipTap;
   final EdgeInsets? contentPadding;
   final bool disableAnimation;
   final Widget actionButton;
@@ -40,7 +39,6 @@ class ToolTipWidget extends StatefulWidget {
     required this.position,
     required this.offset,
     required this.screenSize,
-    required this.onTooltipTap,
     required this.actionButton,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
     required this.disableAnimation,
@@ -139,26 +137,23 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                     top: isArrowUp ? arrowHeight - 1 : 0,
                     bottom: isArrowUp ? 0 : arrowHeight - 1,
                   ),
-                  child: GestureDetector(
-                    onTap: widget.onTooltipTap,
-                    child: Center(
-                      child: Container(
-                        width: _getTooltipWidth(),
-                        padding: widget.contentPadding,
-                        decoration: BoxDecoration(
-                          color: kShowCaseNeutral800,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            widget.content,
-                            SizedBox(height: 24),
-                            widget.actionButton,
-                          ],
-                        ),
+                  child: Center(
+                    child: Container(
+                      width: _getTooltipWidth(),
+                      padding: widget.contentPadding,
+                      decoration: BoxDecoration(
+                        color: kShowCaseNeutral800,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          widget.content,
+                          SizedBox(height: 24),
+                          widget.actionButton,
+                        ],
                       ),
                     ),
                   ),

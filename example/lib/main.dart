@@ -287,18 +287,6 @@ class _MailPageState extends State<MailPage> {
           key: _three,
           infoContent: const Text('content'),
           disposeOnTap: true,
-          onTargetClick: () {
-            Navigator.push<void>(
-              context,
-              MaterialPageRoute<void>(
-                builder: (_) => const Detail(),
-              ),
-            ).then((_) {
-              setState(() {
-                ShowCaseWidget.of(context)!.startShowCase([_four, _five]);
-              });
-            });
-          },
           child: Container(
             padding:
                 const EdgeInsets.only(left: 6, right: 16, top: 5, bottom: 5),
