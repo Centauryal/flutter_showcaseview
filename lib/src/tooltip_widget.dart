@@ -30,10 +30,6 @@ class ToolTipWidget extends StatefulWidget {
   final GetPosition? position;
   final Offset? offset;
   final Size? screenSize;
-  final String? title;
-  final String? description;
-  final TextStyle? titleTextStyle;
-  final TextStyle? descTextStyle;
   final Widget? container;
   final Color? tooltipColor;
   final Color? textColor;
@@ -51,10 +47,6 @@ class ToolTipWidget extends StatefulWidget {
     required this.position,
     required this.offset,
     required this.screenSize,
-    required this.title,
-    required this.description,
-    required this.titleTextStyle,
-    required this.descTextStyle,
     required this.container,
     required this.tooltipColor,
     required this.textColor,

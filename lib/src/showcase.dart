@@ -38,13 +38,9 @@ class Showcase extends StatefulWidget {
   final GlobalKey key;
 
   final Widget child;
-  final String? title;
-  final String? description;
   final bool withStep;
   final ShapeBorder? shapeBorder;
   final BorderRadius? radius;
-  final TextStyle? titleTextStyle;
-  final TextStyle? descTextStyle;
   final TextStyle? textButtonStyle;
   final EdgeInsets contentPadding;
   final Color overlayColor;
@@ -77,15 +73,11 @@ class Showcase extends StatefulWidget {
   const Showcase({
     required this.key,
     required this.child,
-    required this.title,
-    required this.description,
     required this.content,
     this.withStep = false,
     this.shapeBorder,
     this.overlayColor = Colors.black45,
     this.overlayOpacity = 0.75,
-    this.titleTextStyle,
-    this.descTextStyle,
     this.textButtonStyle,
     this.showcaseBackgroundColor = kNeutral800,
     this.textColor = kNeutral300,
@@ -117,40 +109,6 @@ class Showcase extends StatefulWidget {
                 ? true
                 : (onTargetClick == null ? false : true),
             "onTargetClick is required if you're using disposeOnTap");
-
-  const Showcase.withWidget({
-    required this.key,
-    required this.child,
-    required this.container,
-    required this.height,
-    required this.width,
-    required this.content,
-    this.title,
-    this.description,
-    this.withStep = false,
-    this.shapeBorder,
-    this.overlayColor = Colors.black45,
-    this.radius,
-    this.overlayOpacity = 0.75,
-    this.titleTextStyle,
-    this.descTextStyle,
-    this.textButtonStyle,
-    this.showcaseBackgroundColor = kNeutral800,
-    this.textColor = kNeutral300,
-    required this.colorAccent,
-    this.onTargetClick,
-    this.onFinishClick,
-    this.disposeOnTap,
-    this.animationDuration = const Duration(milliseconds: 2000),
-    this.disableAnimation = false,
-    this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
-    this.overlayPadding = EdgeInsets.zero,
-    this.blurValue,
-    this.sizeIndicatorStep = const Size(8, 8),
-  })  : showArrow = false,
-        onToolTipClick = null,
-        assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
-            "overlay opacity must be between 0 and 1.");
 
   @override
   _ShowcaseState createState() => _ShowcaseState();
@@ -325,10 +283,6 @@ class _ShowcaseState extends State<Showcase> {
                 position: position,
                 offset: offset,
                 screenSize: screenSize,
-                title: widget.title,
-                description: widget.description,
-                titleTextStyle: widget.titleTextStyle,
-                descTextStyle: widget.descTextStyle,
                 container: widget.container,
                 tooltipColor: widget.showcaseBackgroundColor,
                 textColor: widget.textColor,

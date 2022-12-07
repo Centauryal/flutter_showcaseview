@@ -169,9 +169,7 @@ class _MailPageState extends State<MailPage> {
                                   children: <Widget>[
                                     Showcase(
                                       key: _one,
-                                      title: 'Menu',
                                       content: const Text('content'),
-                                      description: 'Tap to see menu options',
                                       colorAccent: Colors.orange,
                                       child: Icon(
                                         Icons.menu,
@@ -205,10 +203,7 @@ class _MailPageState extends State<MailPage> {
                     Showcase(
                       overlayPadding: const EdgeInsets.all(5),
                       key: _two,
-                      title: 'Profile',
                       content: const Text('content'),
-                      description:
-                          "Tap to see profile which contains user's name, profile picture, mobile number and country",
                       colorAccent: Colors.orange,
                       showcaseBackgroundColor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
@@ -262,9 +257,7 @@ class _MailPageState extends State<MailPage> {
       ),
       floatingActionButton: Showcase(
         key: _five,
-        title: 'Compose Mail',
         content: const Text('content'),
-        description: 'Click here to compose mail',
         colorAccent: Colors.orange,
         shapeBorder: const CircleBorder(),
         child: FloatingActionButton(
@@ -297,9 +290,7 @@ class _MailPageState extends State<MailPage> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Showcase(
           key: _three,
-          title: 'Email',
           content: const Text('content'),
-          description: 'Tap to check mail',
           disposeOnTap: true,
           colorAccent: Colors.orange,
           onTargetClick: () {
@@ -325,61 +316,22 @@ class _MailPageState extends State<MailPage> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Showcase.withWidget(
-                        key: _four,
-                        content: const Text('content'),
-                        height: 50,
-                        width: 140,
-                        colorAccent: Colors.orange,
-                        shapeBorder: const CircleBorder(),
-                        radius: const BorderRadius.all(Radius.circular(150)),
-                        container: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              width: 45,
-                              height: 45,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xffFCD8DC),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'S',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                              "Your sender's profile ",
-                              style: TextStyle(color: Colors.white),
-                            )
-                          ],
-                        ),
+                      Container(
+                        margin: const EdgeInsets.all(10),
                         child: Container(
-                          margin: const EdgeInsets.all(10),
-                          child: Container(
-                            width: 45,
-                            height: 45,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xffFCD8DC),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'S',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                          width: 45,
+                          height: 45,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xffFCD8DC),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'S',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                             ),
                           ),
