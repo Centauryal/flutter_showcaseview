@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -44,16 +42,16 @@ class Showcase extends StatefulWidget {
   final EdgeInsets overlayPadding;
   final Widget infoContent;
 
-  const Showcase({
+  Showcase({
     required this.key,
     required this.child,
     required this.infoContent,
     this.withStep = false,
     this.shapeBorder,
     this.onFinishClick,
-    this.contentPadding = const EdgeInsets.all(16),
+    EdgeInsets? contentPadding,
     this.overlayPadding = EdgeInsets.zero,
-  });
+  }) : contentPadding = contentPadding ?? EdgeInsets.all(16.w);
 
   @override
   _ShowcaseState createState() => _ShowcaseState();
@@ -61,7 +59,6 @@ class Showcase extends StatefulWidget {
 
 class _ShowcaseState extends State<Showcase> {
   bool _showShowCase = false;
-  Timer? timer;
   GetPosition? position;
 
   @override
@@ -83,15 +80,6 @@ class _ShowcaseState extends State<Showcase> {
     setState(() {
       _showShowCase = activeStep == widget.key;
     });
-
-    if (activeStep == widget.key) {
-      if (ShowCaseWidget.of(context)!.autoPlay) {
-        timer = Timer(
-            Duration(
-                seconds: ShowCaseWidget.of(context)!.autoPlayDelay.inSeconds),
-            _nextIfAny);
-      }
-    }
   }
 
   @override
@@ -113,14 +101,6 @@ class _ShowcaseState extends State<Showcase> {
   }
 
   void _nextIfAny() {
-    if (timer != null && timer!.isActive) {
-      if (ShowCaseWidget.of(context)!.autoPlayLockEnable) {
-        return;
-      }
-      timer!.cancel();
-    } else if (timer != null && !timer!.isActive) {
-      timer = null;
-    }
     ShowCaseWidget.of(context)!.completed(widget.key);
   }
 
@@ -141,10 +121,6 @@ class _ShowcaseState extends State<Showcase> {
     return ShowCaseWidget.of(context)?.activeWidgetId;
   }
 
-  bool disableBarrierInteraction() {
-    return ShowCaseWidget.of(context)!.disableBarrierInteraction;
-  }
-
   Widget buildOverlayOnTarget(
     Offset offset,
     Size size,
@@ -154,24 +130,17 @@ class _ShowcaseState extends State<Showcase> {
     return _showShowCase
         ? Stack(
             children: [
-              GestureDetector(
-                onTap: () {
-                  if (disableBarrierInteraction()) {
-                    _nextIfAny();
-                  }
-                },
-                child: ClipPath(
-                  clipper: RRectClipper(
-                    area: rectBound,
-                    isCircle: widget.shapeBorder == CircleBorder(),
-                    overlayPadding: widget.overlayPadding,
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      color: Colors.black45.withOpacity(0.75),
-                    ),
+              ClipPath(
+                clipper: RRectClipper(
+                  area: rectBound,
+                  isCircle: widget.shapeBorder == CircleBorder(),
+                  overlayPadding: widget.overlayPadding,
+                ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    color: Colors.black45.withOpacity(0.75),
                   ),
                 ),
               ),
@@ -230,15 +199,15 @@ class _TargetWidget extends StatelessWidget {
       child: FractionalTranslation(
         translation: const Offset(-0.5, -0.5),
         child: Container(
-          height: size!.height + 16,
-          width: size!.width + 16,
+          height: size!.height,
+          width: size!.width,
           decoration: ShapeDecoration(
             shape: radius != null
                 ? RoundedRectangleBorder(borderRadius: radius!)
                 : shapeBorder ??
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(8),
+                        Radius.circular(8.w),
                       ),
                     ),
           ),
@@ -260,7 +229,7 @@ class ActionWithOkButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 38,
+      height: 38.w,
       child: ElevatedButton(
         onPressed: okButton,
         child: Text(
@@ -339,7 +308,7 @@ class ActionWithStep extends StatelessWidget {
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: kShowCaseNeutral0,
-                            width: 1,
+                            width: 1.w,
                           ),
                         ),
                         child: IconButton(
@@ -364,6 +333,10 @@ class ActionWithStep extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: kShowCaseLightAccent,
                           shape: BoxShape.circle,
+                          border: Border.all(
+                            color: kShowCaseLightAccent,
+                            width: 1.w,
+                          ),
                         ),
                         child: IconButton(
                           constraints: BoxConstraints(
