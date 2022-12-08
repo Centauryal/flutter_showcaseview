@@ -73,7 +73,6 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
     }
   }
 
-  /// TODO set toolTips width
   double _getTooltipWidth() {
     return 328.w;
   }
