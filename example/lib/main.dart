@@ -34,9 +34,7 @@ class MyApp extends StatelessWidget {
               );
             }
           },
-          blurValue: 1,
           builder: Builder(builder: (context) => const MailPage()),
-          autoPlayDelay: const Duration(seconds: 3),
         ),
       ),
     );
@@ -169,9 +167,7 @@ class _MailPageState extends State<MailPage> {
                                   children: <Widget>[
                                     Showcase(
                                       key: _one,
-                                      title: 'Menu',
-                                      description: 'Tap to see menu options',
-                                      colorAccent: Colors.orange,
+                                      infoContent: const Text('content'),
                                       child: Icon(
                                         Icons.menu,
                                         color: Theme.of(context).primaryColor,
@@ -204,12 +200,7 @@ class _MailPageState extends State<MailPage> {
                     Showcase(
                       overlayPadding: const EdgeInsets.all(5),
                       key: _two,
-                      title: 'Profile',
-                      description:
-                          "Tap to see profile which contains user's name, profile picture, mobile number and country",
-                      colorAccent: Colors.orange,
-                      showcaseBackgroundColor: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
+                      infoContent: const Text('content'),
                       shapeBorder: const CircleBorder(),
                       child: Container(
                         padding: const EdgeInsets.all(5),
@@ -260,9 +251,7 @@ class _MailPageState extends State<MailPage> {
       ),
       floatingActionButton: Showcase(
         key: _five,
-        title: 'Compose Mail',
-        description: 'Click here to compose mail',
-        colorAccent: Colors.orange,
+        infoContent: const Text('content'),
         shapeBorder: const CircleBorder(),
         child: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
@@ -294,22 +283,7 @@ class _MailPageState extends State<MailPage> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Showcase(
           key: _three,
-          title: 'Email',
-          description: 'Tap to check mail',
-          disposeOnTap: true,
-          colorAccent: Colors.orange,
-          onTargetClick: () {
-            Navigator.push<void>(
-              context,
-              MaterialPageRoute<void>(
-                builder: (_) => const Detail(),
-              ),
-            ).then((_) {
-              setState(() {
-                ShowCaseWidget.of(context)!.startShowCase([_four, _five]);
-              });
-            });
-          },
+          infoContent: const Text('content'),
           child: Container(
             padding:
                 const EdgeInsets.only(left: 6, right: 16, top: 5, bottom: 5),
@@ -321,60 +295,22 @@ class _MailPageState extends State<MailPage> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Showcase.withWidget(
-                        key: _four,
-                        height: 50,
-                        width: 140,
-                        colorAccent: Colors.orange,
-                        shapeBorder: const CircleBorder(),
-                        radius: const BorderRadius.all(Radius.circular(150)),
-                        container: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              width: 45,
-                              height: 45,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xffFCD8DC),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'S',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                              "Your sender's profile ",
-                              style: TextStyle(color: Colors.white),
-                            )
-                          ],
-                        ),
+                      Container(
+                        margin: const EdgeInsets.all(10),
                         child: Container(
-                          margin: const EdgeInsets.all(10),
-                          child: Container(
-                            width: 45,
-                            height: 45,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xffFCD8DC),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'S',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                          width: 45,
+                          height: 45,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xffFCD8DC),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'S',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                             ),
                           ),

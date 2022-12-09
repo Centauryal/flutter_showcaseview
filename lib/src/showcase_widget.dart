@@ -22,34 +22,17 @@
 
 import 'package:flutter/material.dart';
 
-import '../showcaseview.dart';
-
 class ShowCaseWidget extends StatefulWidget {
   final Builder builder;
   final VoidCallback? onFinish;
   final Function(int?, GlobalKey)? onStart;
   final Function(int?, GlobalKey)? onComplete;
-  final bool autoPlay;
-  final Duration autoPlayDelay;
-  final bool autoPlayLockEnable;
-  final bool disableBarrierInteraction;
-
-  /// Default overlay blur used by showcase. if [Showcase.blurValue]
-  /// is not provided.
-  ///
-  /// Default value is 0.
-  final double blurValue;
 
   const ShowCaseWidget({
     required this.builder,
     this.onFinish,
     this.onStart,
     this.onComplete,
-    this.autoPlay = false,
-    this.autoPlayDelay = const Duration(milliseconds: 2000),
-    this.autoPlayLockEnable = false,
-    this.blurValue = 0,
-    this.disableBarrierInteraction = false,
   });
 
   static GlobalKey? activeTargetWidget(BuildContext context) {
@@ -74,22 +57,6 @@ class ShowCaseWidget extends StatefulWidget {
 class ShowCaseWidgetState extends State<ShowCaseWidget> {
   List<GlobalKey>? ids;
   int? activeWidgetId;
-  late bool autoPlay;
-  late Duration autoPlayDelay;
-  late bool autoPlayLockEnable;
-  late bool disableBarrierInteraction;
-
-  /// Returns value of  [ShowCaseWidget.blurValue]
-  double get blurValue => widget.blurValue;
-
-  @override
-  void initState() {
-    super.initState();
-    autoPlayDelay = widget.autoPlayDelay;
-    autoPlay = widget.autoPlay;
-    autoPlayLockEnable = widget.autoPlayLockEnable;
-    disableBarrierInteraction = widget.disableBarrierInteraction;
-  }
 
   void startShowCase(List<GlobalKey> widgetIds) {
     if (mounted) {

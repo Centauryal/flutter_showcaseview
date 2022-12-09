@@ -20,11 +20,8 @@
  * SOFTWARE.
  */
 
-import 'dart:async';
-import 'dart:ui';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../utils/colors.dart';
 import 'get_position.dart';
@@ -38,116 +35,23 @@ class Showcase extends StatefulWidget {
   final GlobalKey key;
 
   final Widget child;
-  final String? title;
-  final String? description;
   final bool withStep;
   final ShapeBorder? shapeBorder;
-  final BorderRadius? radius;
-  final TextStyle? titleTextStyle;
-  final TextStyle? descTextStyle;
-  final TextStyle? textButtonStyle;
   final EdgeInsets contentPadding;
-  final Color overlayColor;
-  final double overlayOpacity;
-  final Widget? container;
-  final Color showcaseBackgroundColor;
-  final Color textColor;
-  final Color colorAccent;
-  final bool showArrow;
-  final double? height;
-  final double? width;
-  final Duration animationDuration;
-  final VoidCallback? onToolTipClick;
-  final VoidCallback? onTargetClick;
   final VoidCallback? onFinishClick;
-  final bool? disposeOnTap;
-  final bool disableAnimation;
   final EdgeInsets overlayPadding;
-  final Size sizeIndicatorStep;
+  final Widget infoContent;
 
-  /// Defines blur value.
-  /// This will blur the background while displaying showcase.
-  ///
-  /// If null value is provided,
-  /// [ShowCaseWidget.defaultBlurValue] will be considered.
-  ///
-  final double? blurValue;
-
-  const Showcase({
+  Showcase({
     required this.key,
     required this.child,
-    required this.title,
-    required this.description,
+    required this.infoContent,
     this.withStep = false,
     this.shapeBorder,
-    this.overlayColor = Colors.black45,
-    this.overlayOpacity = 0.75,
-    this.titleTextStyle,
-    this.descTextStyle,
-    this.textButtonStyle,
-    this.showcaseBackgroundColor = kNeutral800,
-    this.textColor = kNeutral300,
-    required this.colorAccent,
-    this.showArrow = true,
-    this.onTargetClick,
     this.onFinishClick,
-    this.disposeOnTap,
-    this.animationDuration = const Duration(milliseconds: 2000),
-    this.disableAnimation = true,
-    this.contentPadding = const EdgeInsets.all(16),
-    this.onToolTipClick,
+    EdgeInsets? contentPadding,
     this.overlayPadding = EdgeInsets.zero,
-    this.blurValue,
-    this.radius,
-    this.sizeIndicatorStep = const Size(8, 8),
-  })  : height = null,
-        width = null,
-        container = null,
-        assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
-            "overlay opacity must be between 0 and 1."),
-        assert(
-            onTargetClick == null
-                ? true
-                : (disposeOnTap == null ? false : true),
-            "disposeOnTap is required if you're using onTargetClick"),
-        assert(
-            disposeOnTap == null
-                ? true
-                : (onTargetClick == null ? false : true),
-            "onTargetClick is required if you're using disposeOnTap");
-
-  const Showcase.withWidget({
-    required this.key,
-    required this.child,
-    required this.container,
-    required this.height,
-    required this.width,
-    this.title,
-    this.description,
-    this.withStep = false,
-    this.shapeBorder,
-    this.overlayColor = Colors.black45,
-    this.radius,
-    this.overlayOpacity = 0.75,
-    this.titleTextStyle,
-    this.descTextStyle,
-    this.textButtonStyle,
-    this.showcaseBackgroundColor = kNeutral800,
-    this.textColor = kNeutral300,
-    required this.colorAccent,
-    this.onTargetClick,
-    this.onFinishClick,
-    this.disposeOnTap,
-    this.animationDuration = const Duration(milliseconds: 2000),
-    this.disableAnimation = false,
-    this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
-    this.overlayPadding = EdgeInsets.zero,
-    this.blurValue,
-    this.sizeIndicatorStep = const Size(8, 8),
-  })  : showArrow = false,
-        onToolTipClick = null,
-        assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
-            "overlay opacity must be between 0 and 1.");
+  }) : contentPadding = contentPadding ?? EdgeInsets.all(16.w);
 
   @override
   _ShowcaseState createState() => _ShowcaseState();
@@ -155,7 +59,6 @@ class Showcase extends StatefulWidget {
 
 class _ShowcaseState extends State<Showcase> {
   bool _showShowCase = false;
-  Timer? timer;
   GetPosition? position;
 
   @override
@@ -177,15 +80,6 @@ class _ShowcaseState extends State<Showcase> {
     setState(() {
       _showShowCase = activeStep == widget.key;
     });
-
-    if (activeStep == widget.key) {
-      if (ShowCaseWidget.of(context)!.autoPlay) {
-        timer = Timer(
-            Duration(
-                seconds: ShowCaseWidget.of(context)!.autoPlayDelay.inSeconds),
-            _nextIfAny);
-      }
-    }
   }
 
   @override
@@ -207,24 +101,7 @@ class _ShowcaseState extends State<Showcase> {
   }
 
   void _nextIfAny() {
-    if (timer != null && timer!.isActive) {
-      if (ShowCaseWidget.of(context)!.autoPlayLockEnable) {
-        return;
-      }
-      timer!.cancel();
-    } else if (timer != null && !timer!.isActive) {
-      timer = null;
-    }
     ShowCaseWidget.of(context)!.completed(widget.key);
-  }
-
-  void _getOnTargetTap() {
-    if (widget.disposeOnTap == true) {
-      ShowCaseWidget.of(context)!.dismiss();
-      widget.onTargetClick!();
-    } else {
-      (widget.onTargetClick ?? _nextIfAny).call();
-    }
   }
 
   void _dismissTap() {
@@ -244,98 +121,39 @@ class _ShowcaseState extends State<Showcase> {
     return ShowCaseWidget.of(context)?.activeWidgetId;
   }
 
-  void _getOnTooltipTap() {
-    if (widget.disposeOnTap == true) {
-      ShowCaseWidget.of(context)!.dismiss();
-    }
-    widget.onToolTipClick?.call();
-  }
-
-  bool disableBarrierInteraction() {
-    return ShowCaseWidget.of(context)!.disableBarrierInteraction;
-  }
-
   Widget buildOverlayOnTarget(
     Offset offset,
     Size size,
     Rect rectBound,
     Size screenSize,
   ) {
-    var blur = 0.0;
-    if (_showShowCase) {
-      blur = widget.blurValue ?? (ShowCaseWidget.of(context)?.blurValue) ?? 0;
-    }
-
-    // Set blur to 0 if application is running on web and
-    // provided blur is less than 0.
-    blur = kIsWeb && blur < 0 ? 0 : blur;
-
     return _showShowCase
         ? Stack(
             children: [
-              GestureDetector(
-                onTap: () {
-                  if (disableBarrierInteraction()) {
-                    _nextIfAny();
-                  }
-                },
-                child: ClipPath(
-                  clipper: RRectClipper(
-                    area: rectBound,
-                    isCircle: widget.shapeBorder == CircleBorder(),
-                    radius: widget.radius,
-                    overlayPadding: widget.overlayPadding,
+              ClipPath(
+                clipper: RRectClipper(
+                  area: rectBound,
+                  isCircle: widget.shapeBorder == CircleBorder(),
+                  overlayPadding: widget.overlayPadding,
+                ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    color: Colors.black45.withOpacity(0.75),
                   ),
-                  child: blur != 0
-                      ? BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
-                            decoration: BoxDecoration(
-                              color: widget.overlayColor
-                                  .withOpacity(widget.overlayOpacity),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          decoration: BoxDecoration(
-                            color: widget.overlayColor
-                                .withOpacity(widget.overlayOpacity),
-                          ),
-                        ),
                 ),
               ),
               _TargetWidget(
                 offset: offset,
                 size: size,
-                onTap: () {
-                  if (disableBarrierInteraction()) {
-                    _getOnTargetTap;
-                  }
-                },
                 shapeBorder: widget.shapeBorder,
               ),
               ToolTipWidget(
                 position: position,
                 offset: offset,
                 screenSize: screenSize,
-                title: widget.title,
-                description: widget.description,
-                titleTextStyle: widget.titleTextStyle,
-                descTextStyle: widget.descTextStyle,
-                container: widget.container,
-                tooltipColor: widget.showcaseBackgroundColor,
-                textColor: widget.textColor,
-                showArrow: widget.showArrow,
-                contentHeight: widget.height,
-                contentWidth: widget.width,
-                onTooltipTap: _getOnTooltipTap,
                 contentPadding: widget.contentPadding,
-                disableAnimation: widget.disableAnimation,
-                animationDuration: widget.animationDuration,
                 actionButton: widget.withStep
                     ? ActionWithStep(
                         length: _lengthShowcase(),
@@ -344,13 +162,12 @@ class _ShowcaseState extends State<Showcase> {
                         nextButton: _nextIfAny,
                         previousButton: _previousTap,
                         finishButton: _dismissTap,
-                        colorAccent: widget.colorAccent,
-                        textButtonStyle: widget.textButtonStyle ?? TextStyle(),
-                        sizeIndicatorStep: widget.sizeIndicatorStep,
+                        textButtonStyle: TextStyle(),
                       )
                     : ActionWithOkButton(
                         okButton: _dismissTap,
                       ),
+                content: widget.infoContent,
               ),
             ],
           )
@@ -362,7 +179,6 @@ class _TargetWidget extends StatelessWidget {
   final Offset offset;
   final Size? size;
   final Animation<double>? widthAnimation;
-  final VoidCallback? onTap;
   final ShapeBorder? shapeBorder;
   final BorderRadius? radius;
 
@@ -371,7 +187,6 @@ class _TargetWidget extends StatelessWidget {
       required this.offset,
       this.size,
       this.widthAnimation,
-      this.onTap,
       this.shapeBorder,
       this.radius})
       : super(key: key);
@@ -383,21 +198,18 @@ class _TargetWidget extends StatelessWidget {
       left: offset.dx,
       child: FractionalTranslation(
         translation: const Offset(-0.5, -0.5),
-        child: GestureDetector(
-          onTap: onTap,
-          child: Container(
-            height: size!.height + 16,
-            width: size!.width + 16,
-            decoration: ShapeDecoration(
-              shape: radius != null
-                  ? RoundedRectangleBorder(borderRadius: radius!)
-                  : shapeBorder ??
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
+        child: Container(
+          height: size!.height,
+          width: size!.width,
+          decoration: ShapeDecoration(
+            shape: radius != null
+                ? RoundedRectangleBorder(borderRadius: radius!)
+                : shapeBorder ??
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.w),
                       ),
-            ),
+                    ),
           ),
         ),
       ),
@@ -417,12 +229,12 @@ class ActionWithOkButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 38,
+      height: 38.w,
       child: ElevatedButton(
         onPressed: okButton,
         child: Text(
           'oke'.toUpperCase(),
-          style: TextStyle(color: kNeutral1000),
+          style: TextStyle(color: kShowCaseNeutral1000),
         ),
       ),
     );
@@ -436,27 +248,23 @@ class ActionWithStep extends StatelessWidget {
   final VoidCallback nextButton;
   final VoidCallback previousButton;
   final VoidCallback finishButton;
-  final Color colorAccent;
   final TextStyle? textButtonStyle;
-  final Size sizeIndicatorStep;
 
-  const ActionWithStep(
-      {Key? key,
-      required this.length,
-      required this.currentPage,
-      required this.skipButton,
-      required this.nextButton,
-      required this.previousButton,
-      required this.finishButton,
-      required this.colorAccent,
-      required this.textButtonStyle,
-      required this.sizeIndicatorStep})
-      : super(key: key);
+  const ActionWithStep({
+    Key? key,
+    required this.length,
+    required this.currentPage,
+    required this.skipButton,
+    required this.nextButton,
+    required this.previousButton,
+    required this.finishButton,
+    required this.textButtonStyle,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var lengthLast = length! - 1;
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -464,12 +272,14 @@ class ActionWithStep extends StatelessWidget {
           children: List.generate(
               length ?? 0,
               (index) => Padding(
-                    padding: const EdgeInsets.only(right: 3),
+                    padding: EdgeInsets.only(right: 8.w),
                     child: Container(
-                      height: sizeIndicatorStep.height,
-                      width: sizeIndicatorStep.width,
+                      height: 8.w,
+                      width: 8.w,
                       decoration: BoxDecoration(
-                          color: index == currentPage ? colorAccent : kGrey,
+                          color: index == currentPage
+                              ? kShowCaseLightAccent
+                              : kShowCaseGrey,
                           shape: BoxShape.circle),
                     ),
                   )),
@@ -480,14 +290,14 @@ class ActionWithStep extends StatelessWidget {
               onTap: skipButton,
               child: Text(
                 'lewati'.toUpperCase(),
-                style: textButtonStyle?.copyWith(color: colorAccent) ??
+                style: textButtonStyle?.copyWith(color: kShowCaseLightAccent) ??
                     Theme.of(context)
                         .textTheme
                         .caption
-                        ?.copyWith(color: colorAccent),
+                        ?.copyWith(color: kShowCaseLightAccent),
               ),
             ),
-            SizedBox(width: 15),
+            SizedBox(width: 14.w),
             currentPage == lengthLast
                 ? Row(
                     children: [
@@ -497,33 +307,49 @@ class ActionWithStep extends StatelessWidget {
                           color: Colors.transparent,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: kNeutral0,
-                            width: 1,
+                            color: kShowCaseNeutral0,
+                            width: 1.w,
                           ),
                         ),
                         child: IconButton(
+                          constraints: BoxConstraints(
+                            maxHeight: 32.w,
+                            maxWidth: 32.w,
+                          ),
+                          padding: EdgeInsets.all(4.w),
+                          iconSize: 24.w,
                           onPressed: previousButton,
                           icon: Center(
                             child: Icon(
                               Icons.chevron_left,
-                              color: kNeutral0,
+                              color: kShowCaseNeutral0,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: colorAccent,
+                          color: kShowCaseLightAccent,
                           shape: BoxShape.circle,
+                          border: Border.all(
+                            color: kShowCaseLightAccent,
+                            width: 1.w,
+                          ),
                         ),
                         child: IconButton(
+                          constraints: BoxConstraints(
+                            maxHeight: 32.w,
+                            maxWidth: 32.w,
+                          ),
+                          padding: EdgeInsets.all(4.w),
+                          iconSize: 24.w,
                           onPressed: finishButton,
                           icon: Center(
                             child: Icon(
                               Icons.check,
-                              color: kNeutral1000,
+                              color: kShowCaseNeutral1000,
                             ),
                           ),
                         ),
@@ -533,15 +359,21 @@ class ActionWithStep extends StatelessWidget {
                 : Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: colorAccent,
+                      color: kShowCaseLightAccent,
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
+                      constraints: BoxConstraints(
+                        maxHeight: 32.w,
+                        maxWidth: 32.w,
+                      ),
+                      padding: EdgeInsets.all(4.w),
+                      iconSize: 24.w,
                       onPressed: nextButton,
                       icon: Center(
                         child: Icon(
                           Icons.chevron_right,
-                          color: kNeutral1000,
+                          color: kShowCaseNeutral1000,
                         ),
                       ),
                     ),
