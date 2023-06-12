@@ -263,8 +263,6 @@ class ActionWithStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var lengthLast = length! - 1;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -298,89 +296,163 @@ class ActionWithStep extends StatelessWidget {
               ),
             ),
             SizedBox(width: 14.w),
-            currentPage == lengthLast
-                ? Row(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: kShowCaseNeutral0,
-                            width: 1.w,
-                          ),
-                        ),
-                        child: IconButton(
-                          constraints: BoxConstraints(
-                            maxHeight: 32.w,
-                            maxWidth: 32.w,
-                          ),
-                          padding: EdgeInsets.all(4.w),
-                          iconSize: 24.w,
-                          onPressed: previousButton,
-                          icon: Center(
-                            child: Icon(
-                              Icons.chevron_left,
-                              color: kShowCaseNeutral0,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: kShowCaseLightAccent,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: kShowCaseLightAccent,
-                            width: 1.w,
-                          ),
-                        ),
-                        child: IconButton(
-                          constraints: BoxConstraints(
-                            maxHeight: 32.w,
-                            maxWidth: 32.w,
-                          ),
-                          padding: EdgeInsets.all(4.w),
-                          iconSize: 24.w,
-                          onPressed: finishButton,
-                          icon: Center(
-                            child: Icon(
-                              Icons.check,
-                              color: kShowCaseNeutral1000,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: kShowCaseLightAccent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      constraints: BoxConstraints(
-                        maxHeight: 32.w,
-                        maxWidth: 32.w,
-                      ),
-                      padding: EdgeInsets.all(4.w),
-                      iconSize: 24.w,
-                      onPressed: nextButton,
-                      icon: Center(
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: kShowCaseNeutral1000,
-                        ),
-                      ),
-                    ),
-                  ),
+            _button(),
           ],
         )
       ],
+    );
+  }
+
+  Widget _button() {
+    var lengthLast = length! - 1;
+
+    if (currentPage == lengthLast) {
+      return _lastPage();
+    } else if (currentPage == 0) {
+      return _firstPage();
+    } else {
+      return _middlePage();
+    }
+  }
+
+  Widget _lastPage() {
+    return Row(
+      children: [
+        Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: kShowCaseNeutral0,
+              width: 1.w,
+            ),
+          ),
+          child: IconButton(
+            constraints: BoxConstraints(
+              maxHeight: 32.w,
+              maxWidth: 32.w,
+            ),
+            padding: EdgeInsets.all(4.w),
+            iconSize: 24.w,
+            onPressed: previousButton,
+            icon: Center(
+              child: Icon(
+                Icons.chevron_left,
+                color: kShowCaseNeutral0,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 8.w),
+        Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: kShowCaseLightAccent,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: kShowCaseLightAccent,
+              width: 1.w,
+            ),
+          ),
+          child: IconButton(
+            constraints: BoxConstraints(
+              maxHeight: 32.w,
+              maxWidth: 32.w,
+            ),
+            padding: EdgeInsets.all(4.w),
+            iconSize: 24.w,
+            onPressed: finishButton,
+            icon: Center(
+              child: Icon(
+                Icons.check,
+                color: kShowCaseNeutral1000,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _middlePage() {
+    return Row(
+      children: [
+        Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: kShowCaseNeutral0,
+              width: 1.w,
+            ),
+          ),
+          child: IconButton(
+            constraints: BoxConstraints(
+              maxHeight: 32.w,
+              maxWidth: 32.w,
+            ),
+            padding: EdgeInsets.all(4.w),
+            iconSize: 24.w,
+            onPressed: previousButton,
+            icon: Center(
+              child: Icon(
+                Icons.chevron_left,
+                color: kShowCaseNeutral0,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 8.w),
+        Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: kShowCaseLightAccent,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+            constraints: BoxConstraints(
+              maxHeight: 32.w,
+              maxWidth: 32.w,
+            ),
+            padding: EdgeInsets.all(4.w),
+            iconSize: 24.w,
+            onPressed: nextButton,
+            icon: Center(
+              child: Icon(
+                Icons.chevron_right,
+                color: kShowCaseNeutral1000,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _firstPage() {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: kShowCaseLightAccent,
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        constraints: BoxConstraints(
+          maxHeight: 32.w,
+          maxWidth: 32.w,
+        ),
+        padding: EdgeInsets.all(4.w),
+        iconSize: 24.w,
+        onPressed: nextButton,
+        icon: Center(
+          child: Icon(
+            Icons.chevron_right,
+            color: kShowCaseNeutral1000,
+          ),
+        ),
+      ),
     );
   }
 }
