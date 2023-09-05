@@ -5,12 +5,12 @@ homepage: https://github.com/simformsolutions/flutter_showcaseview
 issue_tracker: https://github.com/simformsolutions/flutter_showcaseview/issues
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_screenutil: 5.1.0
+  flutter_screenutil: 5.7.0
 
 dev_dependencies:
   flutter_test:
