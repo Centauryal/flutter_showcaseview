@@ -24,15 +24,48 @@ import 'package:flutter/material.dart';
 
 class ShowCaseWidget extends StatefulWidget {
   final Builder builder;
+
+  /// Triggered when all the showcases are completed.
   final VoidCallback? onFinish;
+
+  /// Triggered every time on start of each showcase.
   final Function(int?, GlobalKey)? onStart;
+
+  /// Triggered every time on completion of each showcase
   final Function(int?, GlobalKey)? onComplete;
+
+  /// Whether disabling bouncing/moving animation for all tooltips
+  /// while showcasing
+  ///
+  /// Default to `false`
+  final bool disableMovingAnimation;
+
+  /// Whether disabling initial scale animation for all the default tooltips
+  /// when showcase is started and completed
+  ///
+  /// Default to `false`
+  final bool disableScaleAnimation;
+
+  /// Provides time duration for auto scrolling when [enableAutoScroll] is true
+  final Duration scrollDuration;
+
+  /// While target widget is out viewport then
+  /// whether enabling auto scroll so as to make the target widget visible.
+  final bool enableAutoScroll;
+
+  /// Enable/disable showcase globally. Enabled by default.
+  final bool enableShowcase;
 
   const ShowCaseWidget({
     required this.builder,
     this.onFinish,
     this.onStart,
     this.onComplete,
+    this.scrollDuration = const Duration(milliseconds: 300),
+    this.disableMovingAnimation = false,
+    this.disableScaleAnimation = false,
+    this.enableAutoScroll = false,
+    this.enableShowcase = true,
   });
 
   static GlobalKey? activeTargetWidget(BuildContext context) {
@@ -41,10 +74,10 @@ class ShowCaseWidget extends StatefulWidget {
         ?.activeWidgetIds;
   }
 
-  static ShowCaseWidgetState? of(BuildContext context) {
+  static ShowCaseWidgetState of(BuildContext context) {
     final state = context.findAncestorStateOfType<ShowCaseWidgetState>();
     if (state != null) {
-      return context.findAncestorStateOfType<ShowCaseWidgetState>();
+      return state;
     } else {
       throw Exception('Please provide ShowCaseView context');
     }
@@ -58,18 +91,36 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
   List<GlobalKey>? ids;
   int? activeWidgetId;
 
+  bool get disableMovingAnimation => widget.disableMovingAnimation;
+
+  bool get disableScaleAnimation => widget.disableScaleAnimation;
+
+  bool get enableAutoScroll => widget.enableAutoScroll;
+
+  bool get enableShowcase => widget.enableShowcase;
+
+  /// Starts Showcase view from the beginning of specified list of widget ids.
+  /// If this function is used when showcase has been disabled then it will
+  /// throw an exception.
   void startShowCase(List<GlobalKey> widgetIds) {
-    if (mounted) {
-      setState(() {
-        ids = widgetIds;
-        activeWidgetId = 0;
-        _onStart();
-      });
+    if (!enableShowcase) {
+      throw Exception(
+        "You are trying to start Showcase while it has been disabled with "
+        "`enableShowcase` parameter to false from ShowCaseWidget",
+      );
     }
+    if (!mounted) return;
+    setState(() {
+      ids = widgetIds;
+      activeWidgetId = 0;
+      _onStart();
+    });
   }
 
-  void completed(GlobalKey? id) {
-    if (ids != null && ids![activeWidgetId!] == id && mounted) {
+  /// Completes showcase of given key and starts next one
+  /// otherwise will finish the entire showcase view
+  void completed(GlobalKey? key) {
+    if (ids != null && ids![activeWidgetId!] == key && mounted) {
       setState(() {
         _onComplete();
         activeWidgetId = activeWidgetId! + 1;
@@ -77,14 +128,14 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
 
         if (activeWidgetId! >= ids!.length) {
           _cleanupAfterSteps();
-          if (widget.onFinish != null) {
-            widget.onFinish!();
-          }
+          widget.onFinish?.call();
         }
       });
     }
   }
 
+  /// Completes current active showcase and starts next one
+  /// otherwise will finish the entire showcase view
   void next() {
     if (ids != null && mounted) {
       setState(() {
@@ -94,14 +145,14 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
 
         if (activeWidgetId! >= ids!.length) {
           _cleanupAfterSteps();
-          if (widget.onFinish != null) {
-            widget.onFinish!();
-          }
+          widget.onFinish?.call();
         }
       });
     }
   }
 
+  /// Completes current active showcase and starts previous one
+  /// otherwise will finish the entire showcase view
   void previous() {
     if (ids != null && ((activeWidgetId ?? 0) - 1) >= 0 && mounted) {
       setState(() {
@@ -110,18 +161,15 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
         _onStart();
         if (activeWidgetId! >= ids!.length) {
           _cleanupAfterSteps();
-          if (widget.onFinish != null) {
-            widget.onFinish!();
-          }
+          widget.onFinish?.call();
         }
       });
     }
   }
 
+  /// Dismiss entire showcase view
   void dismiss() {
-    if (mounted) {
-      setState(_cleanupAfterSteps);
-    }
+    if (mounted) setState(_cleanupAfterSteps);
   }
 
   void _onStart() {
@@ -142,8 +190,8 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
   @override
   Widget build(BuildContext context) {
     return _InheritedShowCaseView(
-      child: widget.builder,
       activeWidgetIds: ids?.elementAt(activeWidgetId!),
+      child: widget.builder,
     );
   }
 }
@@ -151,7 +199,7 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
 class _InheritedShowCaseView extends InheritedWidget {
   final GlobalKey? activeWidgetIds;
 
-  _InheritedShowCaseView({
+  const _InheritedShowCaseView({
     required this.activeWidgetIds,
     required Widget child,
   }) : super(child: child);
