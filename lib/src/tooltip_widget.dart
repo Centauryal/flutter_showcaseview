@@ -34,7 +34,8 @@ class ToolTipWidget extends StatefulWidget {
   final Widget actionButton;
   final Widget content;
 
-  ToolTipWidget({
+  const ToolTipWidget({
+    Key? key,
     required this.position,
     required this.offset,
     required this.screenSize,
@@ -44,11 +45,11 @@ class ToolTipWidget extends StatefulWidget {
   });
 
   @override
-  _ToolTipWidgetState createState() => _ToolTipWidgetState();
+  State<ToolTipWidget> createState() => _ToolTipWidgetState();
 }
 
 class _ToolTipWidgetState extends State<ToolTipWidget>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   Offset? position;
 
   bool isArrowUp = false;
@@ -81,7 +82,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
   Widget build(BuildContext context) {
     position = widget.offset;
     final contentOrientation = findPositionForContent(position!);
-    final contentOffsetMultiplier = contentOrientation == "BELOW" ? 1.0 : -1.0;
+    final contentOffsetMultiplier = contentOrientation == 'BELOW' ? 1.0 : -1.0;
     isArrowUp = contentOffsetMultiplier == 1.0;
 
     final contentY = isArrowUp
