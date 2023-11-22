@@ -136,7 +136,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                       width: _getTooltipWidth(),
                       padding: widget.contentPadding,
                       decoration: BoxDecoration(
-                        color: kShowCaseNeutral800,
+                        color: kV2Neutral800,
                         borderRadius: BorderRadius.circular(8.w),
                       ),
                       child: Column(
@@ -169,7 +169,7 @@ class _Arrow extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = kShowCaseNeutral800
+      ..color = kV2Neutral800
       ..strokeWidth = 1.w
       ..style = PaintingStyle.fill;
 
