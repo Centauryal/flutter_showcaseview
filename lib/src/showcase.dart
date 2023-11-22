@@ -48,6 +48,8 @@ class Showcase extends StatefulWidget {
   final ShapeBorder? shapeBorder;
   final EdgeInsets contentPadding;
   final VoidCallback? onFinishClick;
+  final VoidCallback? onNextClick;
+  final VoidCallback? onPreviousClick;
   final EdgeInsets overlayPadding;
   final Widget infoContent;
 
@@ -256,6 +258,8 @@ class Showcase extends StatefulWidget {
     this.withStep = false,
     this.shapeBorder,
     this.onFinishClick,
+    this.onNextClick,
+    this.onPreviousClick,
     EdgeInsets? contentPadding,
     this.overlayPadding = EdgeInsets.zero,
     this.title,
@@ -341,6 +345,8 @@ class Showcase extends StatefulWidget {
     this.shapeBorder,
     required this.contentPadding,
     this.onFinishClick,
+    this.onNextClick,
+    this.onPreviousClick,
     required this.overlayPadding,
     required this.infoContent,
   })  : showArrow = false,
@@ -430,6 +436,8 @@ class _ShowcaseState extends State<Showcase> {
     } else if (timer != null && !timer!.isActive) {
       timer = null;
     }
+
+    widget.onNextClick?.call();
     showCaseWidgetState.completed(widget.key);
   }
 
@@ -439,6 +447,7 @@ class _ShowcaseState extends State<Showcase> {
   }
 
   void _previousTap() {
+    widget.onPreviousClick?.call();
     ShowCaseWidget.of(context).previous();
   }
 
